@@ -1,6 +1,20 @@
 document.addEventListener("DOMContentLoaded", iniciar);
 function iniciar() {
-
+  function pintarEstudios(){
+    $.ajax({
+      type:"post",
+      url:"../controlador/getEstudios.php",
+      data:{"nocache":Math.random()},
+      dataType:"json",
+      success:function(data){
+        console.log("estudios: "+data);
+        var select=$("#estudioAsignatura");
+        $.each(data, function(index, estudio){
+          var option='<option value'
+        })
+      }
+    });
+  };
   function pintarCentros(){
     $.ajax({
       type:"post",
@@ -8,7 +22,7 @@ function iniciar() {
       data:{"nocache":Math.random()},
       dataType:"json",
       success:function(data){
-        console.log(data); 
+        console.log("centros: "+data); 
 
         var select=$("#centro");
         select.empty();
@@ -38,6 +52,7 @@ function iniciar() {
   });
 
   function mostrarFormulario(tipo) {
+    //Según el boton que pulses muetra un formulario distinto
     const contenedor = document.getElementById('formularioConfiguracion');
     let html = '';
 
@@ -61,13 +76,14 @@ function iniciar() {
         </form>
       `;
     } else if (tipo === 'asignatura') {
+      pintarEstudios();
       html = `
         <h3>Nueva Asignatura</h3>
         <form id="formAsignatura">
           <label>Nombre de la Asignatura:</label>
           <input type="text" name="nombreAsignatura" id="nombreAsignatura" class="form-control"><br>
           <label>Estudio al que pertenece:</label>
-          <input type="text" name="estudioAsignatura" id="estudioAsignatura" class="form-control"><br>
+          <select name="estudioAsignatura" id="estudioAsignatura" class="form-control"></select><br>
           <input type="hidden" name="formTipo" value="asignatura">
 
           <button type="submit" class="btn btn-primary mt-2">Guardar Asignatura</button>
@@ -84,7 +100,7 @@ function iniciar() {
           <select id="centro" name="centro" class="form-control">
           </select>
           <br>
-          <label>Nivel</label><br>
+          <label>Nivel:</label><br>
           <select id="nivel" name="nivel" class="form-control">
           <option value="ESO">ESO</option>
           <option value="bachillerato">Bachillerato</option>
@@ -101,6 +117,7 @@ function iniciar() {
       `;
     }
     function validarFormulario(form) {
+      //valida que el formulario no esté vacío ni tenga carácteres extraños
       const inputs = form.querySelectorAll('input, select');
       const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.\-]+$/;
       let valido = true;
@@ -121,6 +138,7 @@ function iniciar() {
 
     contenedor.innerHTML = html;
     const form = contenedor.querySelector('form');
+    // si se envía algún formulario se valida primero y se define la ruta del controlador
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -128,7 +146,7 @@ function iniciar() {
         let url = '';
         if (tipo === 'centro') url = '../controlador/addCentro.php';
         else if (tipo === 'asignatura') url = '../controlador/addAsignatura.php';
-        else if (tipo === 'carrera') url = '../addCarrera.php';
+        else if (tipo === 'carrera') url = '../controlador/addEstudio.php';
         alert('Formulario válido.');
         // Convertir datos del formulario a objeto
         const formData = {};

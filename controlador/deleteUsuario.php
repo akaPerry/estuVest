@@ -22,6 +22,7 @@ try {
     } else {
         $response['message'] = "Error al ejecutar la consulta";
     }
+    $bd->cerrarBD();
 } catch (PDOException $e) {
     $response['error'] = $e->getMessage();
     $response['message'] = "Error en la base de datos";

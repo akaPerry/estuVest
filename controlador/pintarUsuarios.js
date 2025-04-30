@@ -6,8 +6,10 @@ $(document).ready(function(){
         dataType:"json",
         success: function(data){
              // Cuando la petición es exitosa
-             var tabla = $('#tablaUsuarios'); // Selecciona el cuerpo de la tabla
-             tabla.empty(); // Limpia el contenido por si ya tenía algo
+             // Selecciona el cuerpo de la tabla
+             var tabla = $('#tablaUsuarios'); 
+            // Limpia el contenido por si ya tenía algo
+             tabla.empty();
              // Recorre el array de usuarios y crea las filas
              if (Array.isArray(data)) {
 
@@ -24,8 +26,8 @@ $(document).ready(function(){
                         '<td><input type="button" value="Eliminar" onclick="eliminarUsuario(' + usuario.id + ')"></td>' +
                         '<td><input type="button" value="Editar" onclick="editarUsuario(' + usuario.id + ')"></td>'+
                     '</tr>';
-                   
-                    tabla.append(fila); // Agrega la fila a la tabla
+                   // Agrega la fila a la tabla
+                    tabla.append(fila); 
                   
                 });
             } else {

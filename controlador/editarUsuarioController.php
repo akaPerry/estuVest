@@ -28,6 +28,7 @@ $stmt2->bindParam(':ciudad', $_POST['ciudad']);
 $stmt2->bindParam(':estudios', $_POST['estudios']);
 $stmt2->bindParam(':id', $_POST['id']);
 $stmt2->execute();
+$bd->cerrarBD();
 }
 echo "Datos actualizados correctamente";
 

@@ -12,7 +12,7 @@ include_once("../modelo/BaseDatos.php");
    $stmt->bindParam(":ciudad",$ciudad);
    $stmt->bindParam(":tipo",$tipo);
    $stmt->execute();
-
+   $bd->cerrarBD();
 }
 catch(PDOException $e){
     echo("Error: ".$e->getMessage());

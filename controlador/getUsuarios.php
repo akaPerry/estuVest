@@ -20,7 +20,7 @@
             $json[]=$usuario;
         }
         echo json_encode($json);
-
+        $bd->cerrarBD();
     }catch(PDOException $e){
         echo "Error: " . $e->getMessage();
     }

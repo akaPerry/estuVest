@@ -20,7 +20,7 @@ try {
 
     // Enviar los datos como JSON
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-
+    $bd->cerrarBD();
 } catch (PDOException $e) {
     echo json_encode(["error" => "Error: " . $e->getMessage()]);
 }

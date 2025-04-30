@@ -6,9 +6,9 @@ $user = [
 
     
 ];
-
+// Provisional para comprobar como se vería
 $posts = [
-    ['title' => 'Manual de usuario', 'description' => 'Guía en PDF', 'file' => 'manual.pdf', 'author' => 'juanito'],
+    ['title' => 'Tema 1', 'description' => 'Tema 1 de PHP', 'file' => 'manual.pdf', 'author' => 'juanito'],
     ['title' => 'Presentación', 'description' => 'Slides del proyecto', 'file' => 'presentacion.pdf', 'author' => 'usuario_demo'],
 ];
 ?>
@@ -93,7 +93,7 @@ $posts = [
         <input type="text" class="form-control" name="titulo" required>
       </div>
       <div class="mb-3">
-        <label class="form-label">Facultad</label>
+        <label class="form-label">Centro</label>
         <input type="text" class="form-control" name="facultad" required>
       </div>
       <div class="mb-3">
