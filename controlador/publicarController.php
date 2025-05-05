@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($archivoTmp, $rutaDestino)) {
             echo "✅ Publicación subida con éxito. Será publicada en web cuando sea validada por un administrador.";
             // Guardar publicación en base de datos
-            include_once("../controlador/addPublicacionController.php");
+            include_once("../controlador/addPublicacion.php");
         } else {
             echo "❌ Error al guardar el archivo.";
         }

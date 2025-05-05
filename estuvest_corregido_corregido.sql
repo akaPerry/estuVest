@@ -1,0 +1,440 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 05-05-2025 a las 00:17:41
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `estuvest`
+--
+CREATE DATABASE IF NOT EXISTS `estuvest2`;
+use `estuvest2`;
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` tinyint(3) UNSIGNED ZEROFILL NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `admin`
+--
+
+INSERT INTO `admin` (`id`) VALUES
+(007);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `administra`
+--
+
+CREATE TABLE `administra` (
+  `id_admin` tinyint(3) UNSIGNED NOT NULL,
+  `id_publicacion` tinyint(3) UNSIGNED NOT NULL,
+  `fecha` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `asignatura`
+--
+
+CREATE TABLE `asignatura` (
+  `id_asignatura` tinyint(3) UNSIGNED NOT NULL,
+  `id_centro_estudio` tinyint(3) UNSIGNED NOT NULL,
+  `nombre_asignatura` varchar(100) NOT NULL,
+  `anio` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `centro`
+--
+
+CREATE TABLE `centro` (
+  `id_centro` tinyint(3) UNSIGNED NOT NULL,
+  `nombre_centro` varchar(100) NOT NULL,
+  `ciudad` varchar(30) NOT NULL,
+  `tipo` enum('instituto','universidad','otros') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `comentario`
+--
+
+CREATE TABLE `comentario` (
+  `id_comentario` tinyint(3) UNSIGNED NOT NULL,
+  `id_autor` tinyint(3) UNSIGNED NOT NULL,
+  `fecha` datetime NOT NULL,
+  `estado` enum('aprobado','no aprobado') NOT NULL,
+  `id_publicacion` tinyint(3) UNSIGNED NOT NULL,
+  `texto` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estudio`
+--
+
+CREATE TABLE `estudio` (
+  `id_estudio` tinyint(3) UNSIGNED NOT NULL,
+  `nombre_estudio` varchar(100) NOT NULL,
+  `nivel` enum('grado medio','grado superior','grado universitario','master','otro','bachillerato','ESO') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `gestiona`
+--
+
+CREATE TABLE `gestiona` (
+  `id_usuario` tinyint(4) UNSIGNED NOT NULL,
+  `id_admin` tinyint(4) UNSIGNED NOT NULL,
+  `fecha` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `incluye`
+--
+
+CREATE TABLE `incluye` (
+  `id_relacion` tinyint(3) UNSIGNED NOT NULL,
+  `id_centro` tinyint(3) UNSIGNED NOT NULL,
+  `id_estudio` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `publicacion`
+--
+
+CREATE TABLE `publicacion` (
+  `id_publicacion` tinyint(3) UNSIGNED NOT NULL,
+  `archivo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `puntuacion` tinyint(4) NOT NULL DEFAULT 0,
+  `id_autor` tinyint(4) UNSIGNED NOT NULL,
+  `id_asignatura` tinyint(3) UNSIGNED NOT NULL,
+  `id_estudio` tinyint(3) UNSIGNED NOT NULL,
+  `publicado` tinyint(1) NOT NULL DEFAULT 0,
+  `titulo` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `supervisa`
+--
+
+CREATE TABLE `supervisa` (
+  `id_admin` tinyint(3) UNSIGNED NOT NULL,
+  `id_comentario` tinyint(3) UNSIGNED NOT NULL,
+  `fecha` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `id` tinyint(10) UNSIGNED NOT NULL,
+  `nick` varchar(20) NOT NULL,
+  `contrasenia` varchar(255) NOT NULL,
+  `nombre` varchar(20) NOT NULL,
+  `apellidos` varchar(40) NOT NULL,
+  `mail` varchar(50) NOT NULL,
+  `rol` enum('admin','usuario_registrado') NOT NULL DEFAULT 'usuario_registrado'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `nick`, `contrasenia`, `nombre`, `apellidos`, `mail`, `rol`) VALUES
+(7, 'ale', '$2y$10$B4pQYoch8rjSWfR5p9m91uAoZWsqHJQWV6taGgFshiaYch0zOWZO6', 'Jorge', 'Agraz San', 'j.agraz@hotmail.com', 'admin'),
+(9, 'futal', '$2y$10$.VW0nrNiGGy.CqGbBlEiOO3v2bLxWVnMWJP7Y/XjQawQ2JzwRcZGm', 'Fulano', 'De Tal', 'fulanodetal@gmail.com', 'usuario_registrado');
+
+--
+-- Disparadores `usuario`
+--
+DELIMITER $$
+CREATE TRIGGER `after_delete_usuario` AFTER DELETE ON `usuario` FOR EACH ROW BEGIN
+  DECLARE v_ciudad VARCHAR(100);
+  DECLARE v_estudios VARCHAR(100);
+  DECLARE v_fecha_alta DATE;
+
+  -- Obtenemos los datos de usuario_registrado asociados
+  SELECT ciudad, estudios, fecha_alta
+  INTO v_ciudad, v_estudios, v_fecha_alta
+  FROM usuario_registrado
+  WHERE id = OLD.id;
+
+  -- Insertamos en usuario_aux
+  INSERT INTO usuario_aux (
+    id, nick, contrasenia, nombre, apellidos, mail, rol,
+    ciudad, estudios, fecha_alta, fecha_eliminacion
+  )
+  VALUES (
+    OLD.id, OLD.nick, OLD.contrasenia, OLD.nombre, OLD.apellidos, OLD.mail, OLD.rol,
+    v_ciudad, v_estudios, v_fecha_alta, NOW()
+  );
+
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_aux`
+--
+
+CREATE TABLE `usuario_aux` (
+  `id` tinyint(3) UNSIGNED NOT NULL,
+  `nick` varchar(20) NOT NULL,
+  `contrasenia` varchar(255) NOT NULL,
+  `nombre` varchar(20) NOT NULL,
+  `apellidos` varchar(40) NOT NULL,
+  `mail` varchar(50) NOT NULL,
+  `ciudad` varchar(20) NOT NULL,
+  `estudios` varchar(100) NOT NULL,
+  `fecha_alta` date NOT NULL,
+  `fecha_delete` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_registrado`
+--
+
+CREATE TABLE `usuario_registrado` (
+  `id` tinyint(3) UNSIGNED NOT NULL,
+  `ciudad` varchar(20) NOT NULL,
+  `estudios` varchar(100) NOT NULL,
+  `fecha_alta` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario_registrado`
+--
+
+INSERT INTO `usuario_registrado` (`id`, `ciudad`, `estudios`, `fecha_alta`) VALUES
+(9, 'Cartagena', 'grado superior', '2025-04-08 09:39:11');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `admin`
+--
+ALTER TABLE `admin`
+  ADD KEY `fk_admin` (`id`);
+
+--
+-- Indices de la tabla `administra`
+--
+ALTER TABLE `administra`
+  ADD PRIMARY KEY (`id_admin`,`id_publicacion`),
+  ADD KEY `fk_publi` (`id_publicacion`);
+
+--
+-- Indices de la tabla `asignatura`
+--
+ALTER TABLE `asignatura`
+  ADD PRIMARY KEY (`id_asignatura`) USING BTREE;
+
+--
+-- Indices de la tabla `centro`
+--
+ALTER TABLE `centro`
+  ADD PRIMARY KEY (`id_centro`);
+
+--
+-- Indices de la tabla `comentario`
+--
+ALTER TABLE `comentario`
+  ADD PRIMARY KEY (`id_comentario`,`id_autor`),
+  ADD KEY `id_autor` (`id_autor`),
+  ADD KEY `id_publicacion` (`id_publicacion`);
+
+--
+-- Indices de la tabla `estudio`
+--
+ALTER TABLE `estudio`
+  ADD PRIMARY KEY (`id_estudio`);
+
+--
+-- Indices de la tabla `gestiona`
+--
+ALTER TABLE `gestiona`
+  ADD PRIMARY KEY (`id_usuario`,`id_admin`),
+  ADD KEY `fk_gestor` (`id_admin`);
+
+--
+-- Indices de la tabla `incluye`
+--
+ALTER TABLE `incluye`
+  ADD PRIMARY KEY (`id_relacion`),
+  ADD KEY `idx_id_centro` (`id_centro`);
+
+--
+-- Indices de la tabla `publicacion`
+--
+ALTER TABLE `publicacion`
+  ADD PRIMARY KEY (`id_publicacion`),
+  ADD KEY `fk_autor` (`id_autor`),
+  ADD KEY `fk_asignatura` (`id_asignatura`),
+  ADD KEY `publicacion_ibfk_1` (`id_estudio`);
+
+--
+-- Indices de la tabla `supervisa`
+--
+ALTER TABLE `supervisa`
+  ADD PRIMARY KEY (`id_admin`,`id_comentario`),
+  ADD KEY `id_comentario` (`id_comentario`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nick` (`nick`),
+  ADD UNIQUE KEY `mail` (`mail`);
+
+--
+-- Indices de la tabla `usuario_aux`
+--
+ALTER TABLE `usuario_aux`
+  ADD UNIQUE KEY `id` (`id`);
+
+--
+-- Indices de la tabla `usuario_registrado`
+--
+ALTER TABLE `usuario_registrado`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `asignatura`
+--
+ALTER TABLE `asignatura`
+  MODIFY `id_asignatura` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `comentario`
+--
+ALTER TABLE `comentario`
+  MODIFY `id_comentario` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `estudio`
+--
+ALTER TABLE `estudio`
+  MODIFY `id_estudio` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `incluye`
+--
+ALTER TABLE `incluye`
+  MODIFY `id_relacion` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `publicacion`
+--
+ALTER TABLE `publicacion`
+  MODIFY `id_publicacion` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` tinyint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `admin`
+--
+ALTER TABLE `admin`
+  ADD CONSTRAINT `fk_admin` FOREIGN KEY (`id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `administra`
+--
+ALTER TABLE `administra`
+  ADD CONSTRAINT `fk_admin_publi` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_publi` FOREIGN KEY (`id_publicacion`) REFERENCES `publicacion` (`id_publicacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `comentario`
+--
+ALTER TABLE `comentario`
+  ADD CONSTRAINT `comentario_ibfk_1` FOREIGN KEY (`id_autor`) REFERENCES `usuario_registrado` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comentario_ibfk_2` FOREIGN KEY (`id_publicacion`) REFERENCES `publicacion` (`id_publicacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `gestiona`
+--
+ALTER TABLE `gestiona`
+  ADD CONSTRAINT `fk_gestor` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_usu` FOREIGN KEY (`id_usuario`) REFERENCES `usuario_registrado` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `publicacion`
+--
+ALTER TABLE `publicacion`
+  ADD CONSTRAINT `fk_asignatura` FOREIGN KEY (`id_asignatura`) REFERENCES `asignatura` (`id_asignatura`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_autor` FOREIGN KEY (`id_autor`) REFERENCES `usuario_registrado` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `publicacion_ibfk_1` FOREIGN KEY (`id_estudio`) REFERENCES `estudio` (`id_estudio`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `supervisa`
+--
+ALTER TABLE `supervisa`
+  ADD CONSTRAINT `supervisa_ibfk_1` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `supervisa_ibfk_2` FOREIGN KEY (`id_comentario`) REFERENCES `comentario` (`id_comentario`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `usuario_registrado`
+--
+ALTER TABLE `usuario_registrado`
+  ADD CONSTRAINT `fk_usuario_registrado` FOREIGN KEY (`id`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -10,7 +10,8 @@ function iniciar() {
         console.log("estudios: "+data);
         var select=$("#estudioAsignatura");
         $.each(data, function(index, estudio){
-          var option='<option value'
+          var option='<option value="'+estudio.id_relacion+'" >'+estudio.nombre_centro+' - '+ estudio.nombre_estudio+'</option>';
+          select.append(option);
         })
       }
     });
@@ -84,6 +85,8 @@ function iniciar() {
           <input type="text" name="nombreAsignatura" id="nombreAsignatura" class="form-control"><br>
           <label>Estudio al que pertenece:</label>
           <select name="estudioAsignatura" id="estudioAsignatura" class="form-control"></select><br>
+          <label>Año del comienzo del Curso</label>
+          <input type="number" name="anio" id="anio" class="form-control">
           <input type="hidden" name="formTipo" value="asignatura">
 
           <button type="submit" class="btn btn-primary mt-2">Guardar Asignatura</button>

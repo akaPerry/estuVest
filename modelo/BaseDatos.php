@@ -2,7 +2,7 @@
 class BaseDatos {
     private $user = "root";
     private $psd = "";
-    private $bd = "estuvest";
+    private $bd = "estuvest2";
     public $conn;
 
     function __construct()
@@ -11,7 +11,7 @@ class BaseDatos {
             $this->conn = new PDO("mysql:lst=localhost;dbname=$this->bd", $this->user, $this->psd);
 
         } catch (PDOException $e) {
-            echo ("" . $e->getMessage());
+            echo ("Error: " . $e->getMessage());
         }
     }
     //devuelve un array con todos los elementos de una tabla

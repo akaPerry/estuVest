@@ -5,6 +5,7 @@ try{
 $sql="SELECT * FROM estudio NATURAL JOIN incluye NATURAL JOIN centro ORDER BY nivel;";
 $stmt=$bd->conn->prepare($sql);
 $data=$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo (json_encode($data));
 }
 catch(PDOException $e){
