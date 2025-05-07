@@ -73,7 +73,7 @@
                     <option value="bachiller">Bachillerato</option>
                     <option value="grado medio">Grado Medio</option>
                     <option value="grado superior">Grado Superior</option>
-                    <option value="carrera">Carrera Universitaria</option>
+                    <option value="estudio">Estudio Universitaria</option>
                     <option value="master">Máster</option>
                 </select>
             </div>

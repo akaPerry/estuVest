@@ -1,8 +1,6 @@
 <?php
 require_once("../modelo/BaseDatos.php");
 
-
-
 try {
    
     $bd = new BaseDatos();

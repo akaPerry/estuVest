@@ -5,6 +5,7 @@ try{
     $nombreAs=$_POST["nombreAsignatura"];
     $estudioCentro=$_POST["estudioAsignatura"];
     $anio=$_POST["anio"];
+    var_dump($_POST);
 
 $sql="INSERT INTO asignatura VALUES(default, :idRel, :nombre, :anio);";
 $stmt = $bd->conn->prepare($sql);

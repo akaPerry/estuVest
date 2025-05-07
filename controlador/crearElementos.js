@@ -1,42 +1,51 @@
 document.addEventListener("DOMContentLoaded", iniciar);
 function iniciar() {
-  function pintarEstudios(){
+  console.log("Botones encontrados:",
+    document.getElementById('btnModCentro'),
+    document.getElementById('btnModAsig'),
+    document.getElementById('btnModEstudio'));
+
+  function pintarEstudios() {
     $.ajax({
-      type:"post",
-      url:"../controlador/getEstudios.php",
-      data:{"nocache":Math.random()},
-      dataType:"json",
-      success:function(data){
-        console.log("estudios: "+data);
-        var select=$("#estudioAsignatura");
-        $.each(data, function(index, estudio){
-          var option='<option value="'+estudio.id_relacion+'" >'+estudio.nombre_centro+' - '+ estudio.nombre_estudio+'</option>';
+      type: "post",
+      url: "../controlador/getEstudios.php",
+      data: { "nocache": Math.random() },
+      dataType: "json",
+      success: function (data) {
+        console.log("estudios: " + data);
+        var select = $("#estudioAsignatura");
+        $.each(data, function (index, estudio) {
+          var option = '<option value="' + estudio.id_relacion + '" >' +
+           estudio.centro + ' - ' + 
+           estudio.estudio + '</option>';
+
           select.append(option);
         })
       }
     });
   };
-  function pintarCentros(){
-    $.ajax({
-      type:"post",
-      url:"../controlador/getCentros.php",
-      data:{"nocache":Math.random()},
-      dataType:"json",
-      success:function(data){
-        console.log("centros: "+data); 
 
-        var select=$("#centro");
+  function pintarCentros() {
+    $.ajax({
+      type: "post",
+      url: "../controlador/getCentros.php",
+      data: { "nocache": Math.random() },
+      dataType: "json",
+      success: function (data) {
+        console.log("centros: " + data);
+
+        var select = $("#centro");
         select.empty();
-        $.each(data, function(index, centro){
-          var option='<option value="'+centro.id_centro+'">'+centro.nombre_centro+'</option>';
+        $.each(data, function (index, centro) {
+          var option = '<option value="' + centro.id_centro + '">' + centro.nombre_centro + '</option>';
           select.append(option);
         })
       },
-      error: function(xhr, status, error) {
+      error: function (xhr, status, error) {
         console.error("AJAX Error:", error);
         console.log("XHR:", xhr.responseText);
       }
-      
+
     });
   }
   document.getElementById('btnCentro').addEventListener('click', function () {
@@ -48,12 +57,23 @@ function iniciar() {
     pintarCentros();
   });
 
-  document.getElementById('btnCarrera').addEventListener('click', function () {
-    mostrarFormulario('carrera');
+  document.getElementById('btnEstudio').addEventListener('click', function () {
+    mostrarFormulario('estudio');
+  });
+  document.getElementById('btnModCentro').addEventListener('click', function () {
+    mostrarLista('centro');
+  });
+  document.getElementById('btnModAsig').addEventListener('click', function () {
+    mostrarLista('asignatura');
+  });
+  document.getElementById('btnModEstudio').addEventListener('click', function () {
+    mostrarLista('estudio');
   });
 
+
+
   function mostrarFormulario(tipo) {
-    //Según el boton que pulses muetra un formulario distinto
+    //Según el boton que pulses muestra un formulario distinto
     const contenedor = document.getElementById('formularioConfiguracion');
     let html = '';
 
@@ -92,13 +112,13 @@ function iniciar() {
           <button type="submit" class="btn btn-primary mt-2">Guardar Asignatura</button>
         </form>
       `;
-    } else if (tipo === 'carrera') {
+    } else if (tipo === 'estudio') {
       pintarCentros();
       html = `
         <h3>Nueva Carrera/Grado</h3>
-        <form id="formCarrera">
+        <form id="formEstudio">
           <label>Nombre de la Carrera/Grado:</label>
-          <input type="text" name="nombreCarrera" id="nombreCarrera" class="form-control"><br>
+          <input type="text" name="nombreEstudio" id="nombreEstudio" class="form-control"><br>
           <label>Centro Educativo:</label>
           <select id="centro" name="centro" class="form-control">
           </select>
@@ -113,9 +133,9 @@ function iniciar() {
           <option value="master">Máster</option>
           <option value="otro">Otro</option>
           </select><br>
-          <input type="hidden" name="formTipo" value="carrera">
+          <input type="hidden" name="formTipo" value="estudio">
 
-          <button type="submit" class="btn btn-primary mt-2">Guardar Carrera</button>
+          <button type="submit" class="btn btn-primary mt-2">Guardar Estudio</button>
         </form>
       `;
     }
@@ -145,11 +165,11 @@ function iniciar() {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      if (validarFormulario(form)) { 
+      if (validarFormulario(form)) {
         let url = '';
         if (tipo === 'centro') url = '../controlador/addCentro.php';
         else if (tipo === 'asignatura') url = '../controlador/addAsignatura.php';
-        else if (tipo === 'carrera') url = '../controlador/addEstudio.php';
+        else if (tipo === 'estudio') url = '../controlador/addEstudio.php';
         alert('Formulario válido.');
         // Convertir datos del formulario a objeto
         const formData = {};
@@ -159,12 +179,12 @@ function iniciar() {
           formData[input.name] = input.value.trim();
         });
         // enviar datos al servidor
-       
+
         $.ajax({
           url: url,
           type: 'POST',
           data: formData,
-          success: function(respuesta){
+          success: function (respuesta) {
             alert('Datos guardados correctamente: ' + respuesta);
             form.reset();
           },
@@ -178,6 +198,87 @@ function iniciar() {
       }
     });
   }
+  
+ 
+}
+function eliminarElemento(id, tipo) {
+  console.log("Eliminar elemento con id:", id, "y tipo:", tipo);
+  if(confirm("¿Seguro que deseas eliminar este elemento?")){
+    $.ajax({
+      url: '../controlador/eliminarElemento.php',
+      type: 'POST',
+      dataType:'json',
+      data: {
+        'id': id,
+        'tabla': tipo,
+        'nocache': Math.random()
+      },
+      success:function(data){
+        console.log("Elemento eliminado correctamente: "+data);
+        $('#tablaElementos').empty();
+        mostrarLista(tipo);
+      },
+      error:function(xhr){
+        console.error("Error al eliminar elemento:", xhr.responseText);
+        alert("Error al eliminar: " + xhr.responseText);
+      }
+    });
+  
+}
+}
+function mostrarLista(tipo) {
+  console.log("Entrando en mostrarLista con tipo: ", tipo);
 
+  let url = '';
+  let elementos;
+  if (tipo === 'centro') {
+    url = '../controlador/getCentros.php';
+    elementos = ['centro', 'ciudad', 'tipo'];
 
+  }
+  else if (tipo === 'asignatura') {
+    url = '../controlador/getAsignaturas.php';
+    elementos = ['grado', 'nombre', 'curso'];
+  }
+  else if (tipo === 'estudio') {
+    url = '../controlador/getEstudios.php';
+    elementos = ['estudio', 'centro', 'nivel'];
+
+  }
+  $.ajax({
+    url: url,
+    type: 'GET',
+    data: {
+      'nocache': Math.random()
+    },
+    dataType: 'json',
+    success: function (data) {
+      console.log("Script iniciado correctamente");
+      const contenedor = document.getElementById('formularioConfiguracion');
+      let html = `<h3>Listado</h3><table class="table table-striped" id="tablaElementos"><thead><tr>`;
+
+      // Encabezados de la tabla
+      elementos.forEach(el => {
+        html += `<th>${el.charAt(0).toUpperCase() + el.slice(1)}</th>`;
+      });
+
+      html += `<th>Eliminar</th><th>Editar</th></tr></thead><tbody>`;
+
+      // Filas de la tabla
+      data.forEach(item => {
+        html += `<tr>`;
+        elementos.forEach(el => {
+          html += `<td>${item[el]}</td>`;
+        });
+        // Agregar botón para eliminar y editar
+        html += `<td><button class="btn btn-danger" onclick="eliminarElemento(${item.id}, '${tipo}')">Eliminar</button></td>`;
+        html += '<td><button class="btn btn-success" onclick="editarElemento(' + item.id + ','+tipo+')">Modificar</button></td>';
+        html += `</tr>`;
+        
+      });
+
+      html += `</tbody></table>`;
+      contenedor.innerHTML = html;
+    }
+  })
 }

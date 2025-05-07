@@ -8,13 +8,12 @@
   <link rel="stylesheet" href="../css/estilo-vistaAdmin.css">
   </link>
   <link rel="stylesheet" href="../bootstrap-5.0.2-dist/css/bootstrap.min.css">
-  </style>
   <script type="text/javascript" src="../bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../JQuery/jquery-3.7.1.js"></script>
   <script type="text/javascript" src="../controlador/pintarUsuarios.js"></script>
   <script type="text/javascript" src="../controlador/funcionesBotonesTabla_original.js"></script>
   <script type="text/javascript" src="../controlador/datosUsuarioController.js"></script>
-  <script type="text/javascript" src="../controlador/crearElementos.js"></script>
+  <!-- <script type="text/javascript" src="../controlador/crearElementos.js"></script> -->
 
 </head>
 
@@ -93,11 +92,15 @@
         <h2>Configuración</h2>
         <input type="button" name="btnCentro" id="btnCentro" value="Crear nuevo centro educativo">
         <input type="button" name="btnAsig" id="btnAsig" value="Crear nueva asignatura">
-        <input type="button" name="btnCarrera" id="btnCarrera" value="Crear nueva carrera/grado">
+        <input type="button" name="btnEstudio" id="btnEstudio" value="Crear nueva carrera/grado"><br>
+        <input type="button" name="btnModCentro" id="btnModCentro" value="Modificar centros educativo">
+        <input type="button" name="btnModAsig" id="btnModAsig" value="Modificar asignaturas">
+        <input type="button" name="btnModEstudio" id="btnModEstudio" value="Modificar carreras/grados">
         <p>*Antes de añadir a la base de datos unos estudios tiene que estar en la base de dato el centro al que pertenece.</p>
         <p>*Antes de añadir a la base de datos una asignatura hay que crear el estudio al que pertenece</p>
        <!-- Contenedor para los formularios -->
   <div id="formularioConfiguracion"></div>
+  <div id="listaConfiguracion"></div>
       </div>
       <div id="avisos" class="seccion" style="display: none">
         <h2>Avisos</h2>
@@ -124,6 +127,7 @@
       event.target.classList.add('active');
     }
   </script>
+  <script type="text/javascript" src="../controlador/crearElementos.js"></script>
 
 </body>
 
