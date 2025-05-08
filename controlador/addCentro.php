@@ -2,9 +2,9 @@
 include_once("../modelo/BaseDatos.php");
  $bd=new BaseDatos();
  try{
-   $nombre=$_POST['nombreCentro'];
+   $nombre=$_POST['centro'];
    $ciudad=$_POST['ciudad'];
-   $tipo=$_POST['tipoCentro'];
+   $tipo=$_POST['tipo'];
 
    $sql="INSERT INTO centro VALUES (default, :nombre, :ciudad, :tipo);";
    $stmt=$bd->conn->prepare($sql);

@@ -2,7 +2,7 @@
 include_once("../modelo/BaseDatos.php");
 $bd=new BaseDatos();
 try{
-$sql="SELECT a.id_asignatura as 'id', a.nombre_asignatura as 'nombre', CONCAT(c.nombre_centro,'-',e.nombre_estudio) as 'grado',a.anio as 'curso'
+$sql="SELECT a.id_asignatura as 'id', a.nombre_asignatura as 'asignatura', CONCAT(c.nombre_centro,'-',e.nombre_estudio) as 'grado',a.anio as 'curso'
  FROM asignatura a 
 JOIN incluye i ON a.id_centro_estudio=id_relacion 
 NATURAL JOIN centro c

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-05-2025 a las 00:17:41
+-- Tiempo de generación: 08-05-2025 a las 10:41:53
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,10 +18,9 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `estuvest`
+-- Base de datos: `estuvest2`
 --
-CREATE DATABASE IF NOT EXISTS `estuvest2`;
-use `estuvest2`;
+
 -- --------------------------------------------------------
 
 --
@@ -61,8 +60,17 @@ CREATE TABLE `asignatura` (
   `id_asignatura` tinyint(3) UNSIGNED NOT NULL,
   `id_centro_estudio` tinyint(3) UNSIGNED NOT NULL,
   `nombre_asignatura` varchar(100) NOT NULL,
-  `anio` date NOT NULL
+  `anio` smallint(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `asignatura`
+--
+
+INSERT INTO `asignatura` (`id_asignatura`, `id_centro_estudio`, `nombre_asignatura`, `anio`) VALUES
+(4, 3, 'CRR', 2018),
+(5, 7, 'Anatomía', 2014),
+(6, 4, 'Prehistoria', 2020);
 
 -- --------------------------------------------------------
 
@@ -76,6 +84,16 @@ CREATE TABLE `centro` (
   `ciudad` varchar(30) NOT NULL,
   `tipo` enum('instituto','universidad','otros') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `centro`
+--
+
+INSERT INTO `centro` (`id_centro`, `nombre_centro`, `ciudad`, `tipo`) VALUES
+(1, 'UCM', 'Madrid', 'universidad'),
+(2, 'Bohio', 'Cartagena', 'instituto'),
+(3, 'María Moliner', 'Segovia', 'instituto'),
+(4, 'UMU', 'Murcia', 'universidad');
 
 -- --------------------------------------------------------
 
@@ -104,6 +122,17 @@ CREATE TABLE `estudio` (
   `nivel` enum('grado medio','grado superior','grado universitario','master','otro','bachillerato','ESO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `estudio`
+--
+
+INSERT INTO `estudio` (`id_estudio`, `nombre_estudio`, `nivel`) VALUES
+(5, 'Veterinaria', 'grado universitario'),
+(6, 'Ambientales', 'grado superior'),
+(7, 'Historia', 'grado universitario'),
+(8, 'DAW', 'grado superior'),
+(10, 'Veterinaria', 'grado universitario');
+
 -- --------------------------------------------------------
 
 --
@@ -127,6 +156,17 @@ CREATE TABLE `incluye` (
   `id_centro` tinyint(3) UNSIGNED NOT NULL,
   `id_estudio` tinyint(3) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `incluye`
+--
+
+INSERT INTO `incluye` (`id_relacion`, `id_centro`, `id_estudio`) VALUES
+(2, 1, 5),
+(3, 2, 6),
+(4, 1, 7),
+(5, 3, 8),
+(7, 4, 10);
 
 -- --------------------------------------------------------
 
@@ -270,7 +310,8 @@ ALTER TABLE `administra`
 -- Indices de la tabla `asignatura`
 --
 ALTER TABLE `asignatura`
-  ADD PRIMARY KEY (`id_asignatura`) USING BTREE;
+  ADD PRIMARY KEY (`id_asignatura`) USING BTREE,
+  ADD KEY `fk_relacion` (`id_centro_estudio`);
 
 --
 -- Indices de la tabla `centro`
@@ -304,7 +345,8 @@ ALTER TABLE `gestiona`
 --
 ALTER TABLE `incluye`
   ADD PRIMARY KEY (`id_relacion`),
-  ADD KEY `idx_id_centro` (`id_centro`);
+  ADD KEY `idx_id_centro` (`id_centro`),
+  ADD KEY `fk_id_estudio` (`id_estudio`);
 
 --
 -- Indices de la tabla `publicacion`
@@ -350,7 +392,13 @@ ALTER TABLE `usuario_registrado`
 -- AUTO_INCREMENT de la tabla `asignatura`
 --
 ALTER TABLE `asignatura`
-  MODIFY `id_asignatura` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_asignatura` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `centro`
+--
+ALTER TABLE `centro`
+  MODIFY `id_centro` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `comentario`
@@ -362,13 +410,13 @@ ALTER TABLE `comentario`
 -- AUTO_INCREMENT de la tabla `estudio`
 --
 ALTER TABLE `estudio`
-  MODIFY `id_estudio` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_estudio` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `incluye`
 --
 ALTER TABLE `incluye`
-  MODIFY `id_relacion` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_relacion` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion`
@@ -400,6 +448,12 @@ ALTER TABLE `administra`
   ADD CONSTRAINT `fk_publi` FOREIGN KEY (`id_publicacion`) REFERENCES `publicacion` (`id_publicacion`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `asignatura`
+--
+ALTER TABLE `asignatura`
+  ADD CONSTRAINT `fk_relacion` FOREIGN KEY (`id_centro_estudio`) REFERENCES `incluye` (`id_relacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `comentario`
 --
 ALTER TABLE `comentario`
@@ -412,6 +466,12 @@ ALTER TABLE `comentario`
 ALTER TABLE `gestiona`
   ADD CONSTRAINT `fk_gestor` FOREIGN KEY (`id_admin`) REFERENCES `admin` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_usu` FOREIGN KEY (`id_usuario`) REFERENCES `usuario_registrado` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `incluye`
+--
+ALTER TABLE `incluye`
+  ADD CONSTRAINT `fk_id_estudio` FOREIGN KEY (`id_estudio`) REFERENCES `estudio` (`id_estudio`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `publicacion`
