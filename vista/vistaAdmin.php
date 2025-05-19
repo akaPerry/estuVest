@@ -123,7 +123,7 @@
       event.target.classList.add('active');
     }
   </script>
-  <script type="text/javascript" src="../controlador/crearElementos.js"></script>
+  <script type="text/javascript" src="../controlador/crearElementos2.js"></script>
   <script type="text/javascript" src="../bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../JQuery/jquery-3.7.1.js"></script>
   <script type="text/javascript" src="../controlador/pintarUsuarios.js"></script>

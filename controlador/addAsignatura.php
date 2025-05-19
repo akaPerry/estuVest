@@ -2,9 +2,9 @@
 include_once("../modelo/BaseDatos.php");
 $bd=new BaseDatos();
 try{
-    $nombreAs=$_POST["nombreAsignatura"];
-    $estudioCentro=$_POST["estudioAsignatura"];
-    $anio=$_POST["anio"];
+    $nombreAs=$_POST["asignatura"];
+    $estudioCentro=$_POST["grado"];
+    $anio=$_POST["curso"];
     var_dump($_POST);
 
 $sql="INSERT INTO asignatura VALUES(default, :idRel, :nombre, :anio);";
