@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-05-2025 a las 10:41:53
+-- Tiempo de generación: 23-05-2025 a las 10:40:38
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -70,7 +70,11 @@ CREATE TABLE `asignatura` (
 INSERT INTO `asignatura` (`id_asignatura`, `id_centro_estudio`, `nombre_asignatura`, `anio`) VALUES
 (4, 3, 'CRR', 2018),
 (5, 7, 'Anatomía', 2014),
-(6, 4, 'Prehistoria', 2020);
+(6, 4, 'Prehistoria', 2020),
+(13, 7, 'Histología', 2023),
+(14, 4, 'Edad de Bronce', 2025),
+(15, 5, 'Sistemas', 2020),
+(16, 10, 'Plástica', 1478);
 
 -- --------------------------------------------------------
 
@@ -93,7 +97,9 @@ INSERT INTO `centro` (`id_centro`, `nombre_centro`, `ciudad`, `tipo`) VALUES
 (1, 'UCM', 'Madrid', 'universidad'),
 (2, 'Bohio', 'Cartagena', 'instituto'),
 (3, 'María Moliner', 'Segovia', 'instituto'),
-(4, 'UMU', 'Murcia', 'universidad');
+(4, 'UMU', 'Murcia', 'universidad'),
+(5, 'UVA', 'Valladolid', 'universidad'),
+(8, 'UPCT', 'Cartagena', 'universidad');
 
 -- --------------------------------------------------------
 
@@ -127,11 +133,13 @@ CREATE TABLE `estudio` (
 --
 
 INSERT INTO `estudio` (`id_estudio`, `nombre_estudio`, `nivel`) VALUES
-(5, 'Veterinaria', 'grado universitario'),
 (6, 'Ambientales', 'grado superior'),
 (7, 'Historia', 'grado universitario'),
 (8, 'DAW', 'grado superior'),
-(10, 'Veterinaria', 'grado universitario');
+(10, 'Veterinaria', 'grado universitario'),
+(11, 'CyTA', 'grado universitario'),
+(12, 'Adiministración', 'grado medio'),
+(13, 'Magisterio', 'grado universitario');
 
 -- --------------------------------------------------------
 
@@ -162,11 +170,13 @@ CREATE TABLE `incluye` (
 --
 
 INSERT INTO `incluye` (`id_relacion`, `id_centro`, `id_estudio`) VALUES
-(2, 1, 5),
 (3, 2, 6),
 (4, 1, 7),
 (5, 3, 8),
-(7, 4, 10);
+(7, 4, 10),
+(8, 1, 11),
+(9, 2, 12),
+(10, 5, 13);
 
 -- --------------------------------------------------------
 
@@ -177,12 +187,16 @@ INSERT INTO `incluye` (`id_relacion`, `id_centro`, `id_estudio`) VALUES
 CREATE TABLE `publicacion` (
   `id_publicacion` tinyint(3) UNSIGNED NOT NULL,
   `archivo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `puntuacion` tinyint(4) NOT NULL DEFAULT 0,
+  `puntuacion` int(11) NOT NULL DEFAULT 0,
+  `votos` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `descargas` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `id_autor` tinyint(4) UNSIGNED NOT NULL,
   `id_asignatura` tinyint(3) UNSIGNED NOT NULL,
   `id_estudio` tinyint(3) UNSIGNED NOT NULL,
   `publicado` tinyint(1) NOT NULL DEFAULT 0,
-  `titulo` varchar(150) NOT NULL
+  `titulo` varchar(150) NOT NULL,
+  `curso` smallint(5) UNSIGNED NOT NULL,
+  `fecha` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -219,7 +233,8 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id`, `nick`, `contrasenia`, `nombre`, `apellidos`, `mail`, `rol`) VALUES
 (7, 'ale', '$2y$10$B4pQYoch8rjSWfR5p9m91uAoZWsqHJQWV6taGgFshiaYch0zOWZO6', 'Jorge', 'Agraz San', 'j.agraz@hotmail.com', 'admin'),
-(9, 'futal', '$2y$10$.VW0nrNiGGy.CqGbBlEiOO3v2bLxWVnMWJP7Y/XjQawQ2JzwRcZGm', 'Fulano', 'De Tal', 'fulanodetal@gmail.com', 'usuario_registrado');
+(9, 'futal', '$2y$10$.VW0nrNiGGy.CqGbBlEiOO3v2bLxWVnMWJP7Y/XjQawQ2JzwRcZGm', 'Fulano', 'De Tal', 'fulanodetal@gmail.com', 'usuario_registrado'),
+(10, 'mimiguel', '$2y$10$Wwi0enyy3J62EThGwtbwLeG0.BUmZokZiGzZJoYFSlkuQoZ1OFheu', 'Miguel', 'Migueloncio', 'migueloncio@gmail.com', 'usuario_registrado');
 
 --
 -- Disparadores `usuario`
@@ -287,7 +302,8 @@ CREATE TABLE `usuario_registrado` (
 --
 
 INSERT INTO `usuario_registrado` (`id`, `ciudad`, `estudios`, `fecha_alta`) VALUES
-(9, 'Cartagena', 'grado superior', '2025-04-08 09:39:11');
+(9, 'Cartagena', 'grado superior', '2025-04-08 09:39:11'),
+(10, 'Segovia', 'grado superior', '2025-05-19 12:37:59');
 
 --
 -- Índices para tablas volcadas
@@ -392,13 +408,13 @@ ALTER TABLE `usuario_registrado`
 -- AUTO_INCREMENT de la tabla `asignatura`
 --
 ALTER TABLE `asignatura`
-  MODIFY `id_asignatura` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_asignatura` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `centro`
 --
 ALTER TABLE `centro`
-  MODIFY `id_centro` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_centro` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `comentario`
@@ -410,13 +426,13 @@ ALTER TABLE `comentario`
 -- AUTO_INCREMENT de la tabla `estudio`
 --
 ALTER TABLE `estudio`
-  MODIFY `id_estudio` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_estudio` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `incluye`
 --
 ALTER TABLE `incluye`
-  MODIFY `id_relacion` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_relacion` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `publicacion`
@@ -428,7 +444,7 @@ ALTER TABLE `publicacion`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` tinyint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` tinyint(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas

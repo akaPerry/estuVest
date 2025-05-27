@@ -5,8 +5,7 @@ $(document).ready(function(){
         data:{"nocache":Math.random()},
         dataType:"json",
         success: function(data){
-             // Cuando la petición es exitosa
-             // Selecciona el cuerpo de la tabla
+             // Cuando la petición es exitosa selecciona el cuerpo de la tabla
              var tabla = $('#tablaUsuarios'); 
             // Limpia el contenido por si ya tenía algo
              tabla.empty();

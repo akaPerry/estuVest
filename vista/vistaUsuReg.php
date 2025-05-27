@@ -23,6 +23,11 @@ $posts = [
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" src="../controlador/funcionesBotonesTabla_original.js"></script>
   <script type="text/javascript" src="../controlador/publicar.js"></script>
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="../controlador/funcionesVistaUsu.js"></script>
+
+
  
   <style>
     body {
@@ -86,19 +91,34 @@ $posts = [
 
   <!-- Sección: Publicar -->
   <div id="section-publicar" class="section hidden-section">
+    <div id="alertContainer"></div>
     <h3>Subir nueva publicación</h3>
     <form method="post" action="" enctype="multipart/form-data" id="formPublicar">
       <div class="mb-3">
         <label class="form-label">Título</label>
-        <input type="text" class="form-control" name="titulo" required>
+        <input type="text" class="form-control" name="titulo" id="titulo" required>
       </div>
       <div class="mb-3">
-        <label class="form-label">Centro</label>
-        <input type="text" class="form-control" name="facultad" required>
+        <label class="form-label">Centro</label><br>
+        <select class="form-control" name="centro" id="centro" required> 
+          <option value="0">Selecciona un centro...</option>
+        </select>
+      </div>
+       <div class="mb-3">
+        <label class="form-label">Grado</label><br>
+        <select class="form-control" name="estudio" id="estudio" required>
+          <option value="0">Selecciona un grado...</option> 
+        </select>
+      </div>
+       <div class="mb-3">
+        <label class="form-label">Asignatura/Módulo</label><br>
+        <select class="form-control" name="asignatura" id="asignatura" required>
+          <option value="0">Selecciona una asignatura/módulo...</option> 
+        </select>
       </div>
       <div class="mb-3">
         <label class="form-label">Curso</label>
-        <input type="number" class="form-control" name="curso" required>
+        <input type="number" class="form-control" name="curso" id="curso" required>
       </div>
       <div class="mb-3">
         <label class="form-label">Archivo PDF</label>
@@ -163,6 +183,11 @@ $posts = [
   // Mostrar sección de tablón por defecto
   showSection('tablon');
 </script>
-
+<script>
+  $(document).ready(function() {
+    $('select').select2();
+   
+  });
+</script>
 </body>
 </html>

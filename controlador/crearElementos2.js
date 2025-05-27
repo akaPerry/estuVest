@@ -344,3 +344,6 @@ function editarElemento(id, tipo) {
     }
   });
 }
+function generarAvisosPublicacion(){
+
+}
