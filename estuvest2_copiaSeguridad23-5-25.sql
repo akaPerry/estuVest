@@ -199,6 +199,9 @@ CREATE TABLE `publicacion` (
   `fecha` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+Hazme un card que salgan los datos la ruta tienes que cogerla para mostrarla con un boton, el nick del id_autor
+ bd name usuario_registrado, nombre de la asignatura bd name asignatura, titulo, curso, nombre del estudio bd name estudio, fecha de publicacion, y añade dos botones de aceptar y rechazar
+
 -- --------------------------------------------------------
 
 --

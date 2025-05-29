@@ -1,99 +1,105 @@
-document.addEventListener("DOMContentLoaded",iniciar);
-function iniciar(){
-    document.getElementById("subirBtn").addEventListener("click", function (e) {
+document.addEventListener("DOMContentLoaded", iniciar);
+function iniciar() {
+  document.getElementById("subirBtn").addEventListener("click", function (e) {
     if (!validarFormularioPublicacion()) {
       e.preventDefault(); // Bloquea el envío
     }
   });
 
-     $('#centro').on('change', function () {
-        const idCentro = $(this).val();
-        llenarSelectEstudio(idCentro);
-        llenarSelectAsignatura('0');
-    });
-     $('#estudio').on('change', function () {
-        const idGrado = $(this).val();
-        llenarSelectAsignatura(idGrado);
-    });
-    llenarSelectCentro();
+  $("#centro").on("change", function () {
+    const idCentro = $(this).val();
+    llenarSelectEstudio(idCentro);
+    llenarSelectAsignatura("0");
+  });
+  $("#estudio").on("change", function () {
+    const idGrado = $(this).val();
+    llenarSelectAsignatura(idGrado);
+  });
+
+  llenarSelectCentro();
+  cargarPublicacionesTablon();
 }
 
-function llenarSelectCentro(){
-    var select = $('#centro');
-    $.ajax({
-        type: "POST",
-        url: "../controlador/getCentros.php",
-        data: {"nocache": Math.random()},
-        dataType: "json",
-        success: function(data){
-            $.each(data, function(index, centro){
-                var option="<option value='"+centro.id+"'>"+centro.centro+"</option>";
-                select.append(option);
-            });
-        },
-         error: function (xhr, status, error) {
+function llenarSelectCentro() {
+  var select = $("#centro");
+  $.ajax({
+    type: "POST",
+    url: "../controlador/getCentros.php",
+    data: { nocache: Math.random() },
+    dataType: "json",
+    success: function (data) {
+      $.each(data, function (index, centro) {
+        var option =
+          "<option value='" + centro.id + "'>" + centro.centro + "</option>";
+        select.append(option);
+      });
+    },
+    error: function (xhr, status, error) {
       console.error("Error al obtener centros:", error);
-    }
+    },
+  });
+}
+
+function llenarSelectEstudio(idCentro) {
+  const select = $("#estudio");
+  select.empty();
+  if (idCentro == 0) {
+    select.append(
+      '<option value="0">Seleccione un centro de estudios</option>'
+    );
+    return;
+  } else {
+    $.ajax({
+      url: "../controlador/getEstudios.php",
+      type: "POST",
+      data: {
+        idCentro: idCentro,
+        nocache: Math.random(),
+      },
+      dataType: "json",
+      success: function (data) {
+        select.empty();
+        select.append(
+          "<option value='0'>Selecciona un grado/asignatura</option>"
+        );
+        $.each(data, function (index, modulo) {
+          const option = `<option value='${modulo.id_relacion}'>${modulo.estudio}</option>`;
+          select.append(option);
+        });
+      },
     });
+  }
+}
+function llenarSelectAsignatura(idGrado) {
+  const select = $("#asignatura");
+  select.empty();
+  if (idGrado == 0) {
+    select.append('<option value="0">Seleccione un grado/curso</option>');
+  } else {
+    $.ajax({
+      url: "../controlador/getAsignaturas.php",
+      type: "POST",
+      data: {
+        idGrado: idGrado,
+        nocache: Math.random(),
+      },
+      dataType: "json",
+      success: function (data) {
+        select.empty();
+        select.append("<option value='0'>Selecciona una asignatura</option>");
+        $.each(data, function (index, asignatura) {
+          const option = `<option value='${asignatura.id}'>${asignatura.asignatura}</option>`;
+          select.append(option);
+        });
+      },
+      error: function () {
+        console.log("Error al obtener los datos");
+      },
+    });
+  }
 }
 
-function llenarSelectEstudio(idCentro){
-     const select = $('#estudio'); 
-    select.empty();
-     if (idCentro==0) {
-        select.append('<option value="0">Seleccione un centro de estudios</option>');
-        return;
-    }
-    else{
-        $.ajax({
-        url:"../controlador/getEstudios.php",
-        type: "POST",
-        data: {
-            "idCentro": idCentro,
-            "nocache":Math.random()
-        },
-        dataType: "json",
-        success:function(data){
-            select.empty();
-            select.append("<option value='0'>Selecciona un grado/asignatura</option>");
-            $.each(data, function (index, modulo) {
-                const option = `<option value='${modulo.id_relacion}'>${modulo.estudio}</option>`;
-                select.append(option);
-            });
-        }
-        });
-    }
-}
-function llenarSelectAsignatura(idGrado){
-    const select=$("#asignatura");
-    select.empty();
-    if(idGrado==0){
-        select.append('<option value="0">Seleccione un grado/curso</option>');
-    }else{
-        $.ajax({
-            url:"../controlador/getAsignaturas.php",
-            type: "POST",
-            data:{
-                "idGrado":idGrado,
-                "nocache":Math.random()
-                },
-            dataType: "json",
-            success:function(data){
-                select.empty();
-                select.append("<option value='0'>Selecciona una asignatura</option>");
-                $.each(data, function (index, asignatura) {
-                    const option = `<option value='${asignatura.id}'>${asignatura.asignatura}</option>`;
-                    select.append(option);
-                });
-            },
-            error:function(){
-                console.log("Error al obtener los datos");
-                }
-        });
-    }
-}
-
- function validarFormularioPublicacion() {
+function validarFormularioPublicacion() {
   const tituloInput = document.querySelector("input[name='titulo']");
   const cursoInput = document.querySelector("input[name='curso']");
   const centroSelect = document.getElementById("centro");
@@ -108,7 +114,13 @@ function llenarSelectAsignatura(idGrado){
   let errores = [];
 
   // Limpiar errores anteriores
-  [tituloInput, cursoInput, centroSelect, estudioSelect, asignaturaSelect].forEach(el => el.classList.remove("campo-error"));
+  [
+    tituloInput,
+    cursoInput,
+    centroSelect,
+    estudioSelect,
+    asignaturaSelect,
+  ].forEach((el) => el.classList.remove("campo-error"));
   alertContainer.innerHTML = ""; // Limpiar alerta previa
 
   const regexTitulo = /^(?!\s*$).+/;
@@ -139,7 +151,7 @@ function llenarSelectAsignatura(idGrado){
   }
 
   if (errores.length > 0) {
-    const htmlErrores = errores.map(err => `<li>${err}</li>`).join("");
+    const htmlErrores = errores.map((err) => `<li>${err}</li>`).join("");
     const alertaHTML = `
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Se han encontrado los siguientes errores:</strong>
@@ -154,4 +166,114 @@ function llenarSelectAsignatura(idGrado){
   return true;
 }
 
-  
+function cargarPublicacionesTablon() {
+  // Vaciar el contenido antes de introducir el nuevo HTML
+  $("#section-tablon").empty();
+
+  $.ajax({
+    url: "../controlador/getPublicacionesTablon.php",
+    type: "POST",
+    success: function (html) {
+      $("#section-tablon").html("<h3>Tablón de Publicaciones</h3>" + html);
+
+      cargaIsotope();
+
+      document.querySelectorAll(".ver-publicacion").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const id = this.getAttribute("data-id");
+          if (id) {
+            window.location.href = `publicacion_comentarios.php?id=${id}`;
+          }
+        });
+      });
+    },
+    error: function () {
+      $("#section-tablon").html(
+        '<div class="alert alert-danger">No se pudieron cargar las publicaciones.</div>'
+      );
+    },
+  });
+}
+
+
+function cargaIsotope () {
+    let $grid = new Isotope("#section-tablon", {
+      itemSelector: ".card",
+      layoutMode: "fitRows",
+      getSortData: {
+        asignatura: "[data-asignatura]",
+        autor: "[data-autor]",
+        estudio: "[data-estudio]",
+        curso: "[data-curso]",
+        fecha: "[data-fecha]"
+      }
+    });
+
+    // Buscador en vivo
+    $('#search').on('input', function () {
+      let filtro = $(this).val().toLowerCase();
+      $('.close-btn').toggleClass('d-none', filtro === '');
+
+      $grid.arrange({
+        filter: function () {
+          let texto = $(this).text().toLowerCase();
+          return texto.includes(filtro);
+        }
+      });
+    });
+
+    // Botón limpiar buscador
+    $('.close-btn').on('click', function () {
+      $('#search').val('');
+      $grid.arrange({ filter: '*' });
+      $(this).addClass('d-none');
+    });
+
+    // Ordenar por atributo
+    $('#sort-by').on('change', function () {
+      let sortByValue = $(this).val();
+      $grid.arrange({ sortBy: sortByValue });
+    });
+
+}
+
+$(document).on("mouseenter", ".vote-star", function () {
+  const value = $(this).data("value");
+  $(this)
+    .parent()
+    .children()
+    .each(function () {
+      $(this).toggleClass("text-warning", $(this).data("value") <= value);
+    });
+});
+
+$(document).on("mouseleave", ".votacion", function () {
+  $(this).children().removeClass("text-warning");
+});
+
+$(document).on("click", ".vote-star", function () {
+  const valor = $(this).data("value");
+  const container = $(this).closest(".votacion");
+  const idPublicacion = container.data("id");
+
+  $.ajax({
+    url: "../controlador/addVoto.php",
+    method: "POST",
+    data: {
+      id_publicacion: idPublicacion,
+      puntuacion: valor,
+    },
+    success: function (response) {
+      if (response.success) {
+        alert("Gracias por votar");
+        container.html('<span class="text-success">¡Ya votaste!</span>');
+        cargarPublicacionesTablon();
+      } else {
+        alert(response.message || "Error al votar");
+      }
+    },
+    error: function () {
+      alert("Error al enviar el voto.");
+    },
+  });
+});

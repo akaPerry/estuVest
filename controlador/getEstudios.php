@@ -39,7 +39,7 @@ NATURAL JOIN centro c ORDER BY nivel;";
  i.id_centro as 'id_relacion'
  FROM estudio e NATURAL JOIN incluye i
  NATURAL JOIN centro c WHERE e.id_estudio = '$id' ORDER BY nivel;";
-        $stmt = $bd->conn->prepare($sql2);
+        $stmt = $bd->conn->prepare($sql3);
         $data = $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo (json_encode($data));

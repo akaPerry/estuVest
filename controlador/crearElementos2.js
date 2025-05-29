@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", iniciar);
 function iniciar() {
+  generarAvisosPublicacion();
   console.log("Función iniciar ejecutada correctamente");
 
   // Asignar eventos a botones
@@ -344,6 +345,70 @@ function editarElemento(id, tipo) {
     }
   });
 }
-function generarAvisosPublicacion(){
 
+
+function generarAvisosPublicacion(){
+  let url = '../controlador/getPublicaciones.php';
+
+  $.ajax({
+      url: url,
+      type: 'POST',
+      success: function(response) {
+          $("#publicacionesRevisar").html(response);
+        
+          const total = $("#contenedorPublicaciones").data("count");
+          if (total !== undefined) {
+              $("#alertNumber").html(total);
+          }
+      },
+      error: function() {
+          $("#publicacionesRevisar").html('<div class="alert alert-danger">Error al cargar las publicaciones.</div>');
+      }
+  });
+}
+
+
+function aceptarPublicacion(btn) {
+    const id = $(btn).data("id");
+    actualizarPublicacion(id, 'aceptar');
+}
+
+function rechazarPublicacion(btn) {
+    const id = $(btn).data("id");
+    actualizarPublicacion(id, 'rechazar');
+}
+
+
+function actualizarPublicacion(id, accion) {
+    $.ajax({
+        url: '../controlador/updatePublicacion.php',
+        type: 'POST',
+        data: {
+            id: id,
+            accion: accion
+        },
+        success: function(response) {
+            alert(response);
+            
+            // Elimina la card del DOM
+            const card = $('button[data-id="' + id + '"]').closest('.card');
+            card.remove();
+
+            // Actualiza el contador
+            let total = parseInt($("#alertNumber").text());
+            if (!isNaN(total) && total > 0) {
+                total -= 1;
+                $("#alertNumber").text(total);
+            }
+
+            // Opcional: ocultar el aviso si no quedan publicaciones
+            if (total === 0) {
+                $("#alertNumber").closest('.alert').hide(); // o mostrar otro mensaje
+                $("#publicacionesRevisar").html('<div class="alert alert-info">No hay más publicaciones pendientes.</div>');
+            }
+        },
+        error: function() {
+            alert("Error al procesar la publicación.");
+        }
+    });
 }
