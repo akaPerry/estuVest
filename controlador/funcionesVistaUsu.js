@@ -168,13 +168,12 @@ function validarFormularioPublicacion() {
 
 function cargarPublicacionesTablon() {
   // Vaciar el contenido antes de introducir el nuevo HTML
-  $("#section-tablon").empty();
-
+  $("#publicaciones").empty();
   $.ajax({
     url: "../controlador/getPublicacionesTablon.php",
     type: "POST",
-    success: function (html) {
-      $("#section-tablon").html("<h3>Tablón de Publicaciones</h3>" + html);
+    success: function (html) { 
+      $("#publicaciones").html(html);
 
       cargaIsotope();
 
@@ -197,7 +196,7 @@ function cargarPublicacionesTablon() {
 
 
 function cargaIsotope () {
-    let $grid = new Isotope("#section-tablon", {
+    let $grid = new Isotope("#publicaciones", {
       itemSelector: ".card",
       layoutMode: "fitRows",
       getSortData: {

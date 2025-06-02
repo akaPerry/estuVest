@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", iniciar);
 function iniciar() {
   generarAvisosPublicacion();
+  mostrarTablaPublicaciones();
   console.log("Función iniciar ejecutada correctamente");
 
   // Asignar eventos a botones
@@ -306,7 +307,7 @@ function mostrarLista(tipo) {
 
 // Función para eliminar elemento
 function eliminarElemento(id, tipo) {
-  if (confirm("¿Seguro que deseas eliminar este elemento?")) {
+  if (confirm("¿Estás seguro/a que deseas eliminar este elemento?")) {
     $.ajax({
       url: '../controlador/eliminarElemento.php',
       type: 'POST',
@@ -412,3 +413,62 @@ function actualizarPublicacion(id, accion) {
         }
     });
 }
+
+  function mostrarTablaPublicaciones() {
+    $.ajax({
+      url: '../controlador/getPublicacionesTabla.php',
+      type: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        const contenedor = $('#publicacionesContenedor');
+        contenedor.empty();
+        let html = `
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Curso</th>
+                <th>Asignatura</th>
+                <th>Estudio</th>
+                <th>Ver PDF</th>
+                <th>Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>`;
+        data.forEach(pub => {
+          html += `<tr>
+            <td>${pub.titulo}</td>
+            <td>${pub.autor}</td>
+            <td>${pub.curso}</td>
+            <td>${pub.asignatura}</td>
+            <td>${pub.estudio}</td>
+            <td><a href="${pub.archivo}" target="_blank" class="btn btn-info">Ver PDF</a></td>
+            <td><button class="btn btn-danger" onclick="eliminarPublicacion(${pub.id_publicacion})">Eliminar</button></td>
+          </tr>`;
+        });
+        html += `</tbody></table>`;
+        contenedor.append(html);
+      },
+      error: function () {
+        alert('Error al cargar las publicaciones.');
+      }
+    });
+  }
+
+  // Función para eliminar publicación
+  function eliminarPublicacion(id) {
+    if (confirm("¿Seguro que deseas eliminar esta publicación?")) {
+      $.ajax({
+        url: '../controlador/deletePublicacion.php',
+        type: 'POST',
+        data: { id: id },
+        success: function () {
+          mostrarTablaPublicaciones();
+        },
+        error: function () {
+          alert('Error al eliminar la publicación.');
+        }
+      });
+    }
+  }

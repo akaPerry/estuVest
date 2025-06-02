@@ -43,6 +43,9 @@
         <li class="nav-item">
           <a href="#" class="nav-link" onclick="mostrarSeccion('avisos')">Avisos <span id="alertNumber" class="badge rounded-pill bg-danger">0</span> </a>
         </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="mostrarSeccion('publicaciones')">Publicaciones</a>
+        </li>
       </ul>
     </nav>
 
@@ -100,8 +103,12 @@
       </div>
       <div id="avisos" class="seccion" style="display: none">
         <h2>Avisos</h2>
-        <p>Aquí va un menú con los avisos</p>
+       
         <div id="publicacionesRevisar"></div>
+      </div>
+      <div id="publicaciones" class="seccion" style="display: none">
+        <h2>Publicaciones</h2>
+        <div id="publicacionesContenedor"></div>
       </div>
     </main>
   </div>

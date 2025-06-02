@@ -17,7 +17,7 @@ try {
         INNER JOIN asignatura a ON p.id_asignatura = a.id_asignatura
         INNER JOIN estudio e ON p.id_estudio = e.id_estudio
         WHERE p.publicado = 1
-        ORDER BY p.fecha DESC
+        ORDER BY p.fecha DESC;
     ";
     $stmt = $bd->conn->prepare($sql);
     $stmt->execute();
@@ -28,7 +28,7 @@ try {
     $votosStmt->execute();
     $todosVotos = $votosStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Obtener todos los comentarios aprobados
+    // Obtener todos los comentarios
     $comentariosStmt = $bd->conn->prepare("
         SELECT c.*, u.nick AS autor_comentario
         FROM comentario c

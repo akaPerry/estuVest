@@ -6,11 +6,11 @@ $user = [
 
 
 ];
-// Provisional para comprobar como se vería
+/*Provisional para comprobar como se vería
 $posts = [
   ['title' => 'Tema 1', 'description' => 'Tema 1 de PHP', 'file' => 'manual.pdf', 'author' => 'juanito'],
   ['title' => 'Presentación', 'description' => 'Slides del proyecto', 'file' => 'presentacion.pdf', 'author' => 'usuario_demo'],
-];
+];*/
 ?>
 
 <!DOCTYPE html>
@@ -85,44 +85,45 @@ $posts = [
   <!-- Contenido principal -->
   <div class="container">
     <!-- Sección: Tablón -->
-    <div class="section">
-      <h3>Tablón de Publicaciones</h3>
-
-      <div class="row align-items-center mb-3">
+    <div class="section" id="buscador">
+      <div id="tablon-controls" class="row align-items-center mb-3">
         <!-- Buscador -->
         <div class="col-md-6 mb-2">
           <form class="form m-0" onsubmit="return false;">
-            <label for="search" class="w-100 position-relative">
-              <input autocomplete="off" placeholder="Buscar..." id="search" type="text" class="form-control pe-5" />
-              <div class="position-absolute end-0 top-0 mt-2 me-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                  class="bi bi-x-circle close-btn d-none" viewBox="0 0 16 16" style="cursor:pointer;">
-                  <path
-                    d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                </svg>
-              </div>
-            </label>
+        <label for="search" class="w-100 position-relative">
+          <input autocomplete="off" placeholder="Buscar..." id="search" type="text" class="form-control pe-5" />
+          <div class="position-absolute end-0 top-0 mt-2 me-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+          class="bi bi-x-circle close-btn d-none" viewBox="0 0 16 16" style="cursor:pointer;">
+          <path
+            d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </div>
+        </label>
           </form>
         </div>
 
         <!-- Ordenación -->
         <div class="col-md-6 mb-2">
           <select id="sort-by" class="form-select">
-            <option value="original-order">Orden por defecto</option>
-            <option value="asignatura">Asignatura</option>
-            <option value="autor">Autor</option>
-            <option value="estudio">Estudio</option>
-            <option value="curso">Curso</option>
-            <option value="fecha">Fecha</option>
+        <option value="original-order">Orden por defecto</option>
+        <option value="asignatura">Asignatura</option>
+        <option value="autor">Autor</option>
+        <option value="estudio">Estudio</option>
+        <option value="curso">Curso</option>
+        <option value="fecha">Fecha</option>
           </select>
         </div>
+      </div>
       </div>
 
       <!-- Aquí se insertarán los cards -->
       <div id="section-tablon" class="section">
+        <h3>Tablón de Publicaciones</h3>
           <!-- Aquí se insertarán los cards -->
+        <div id="publicaciones"></div>
       </div>
-    </div>
+    
 
 
     <!-- Sección: Publicar -->
@@ -225,6 +226,21 @@ $posts = [
 
     });
   </script>
+  <script>
+        // Oculta los controles cuando no está visible la sección de tablón
+        function showSection(section) {
+          const sections = ['tablon', 'publicar', 'ver', 'perfil'];
+          sections.forEach(id => {
+        document.getElementById(`section-${id}`).classList.add('hidden-section');
+          });
+          document.getElementById(`section-${section}`).classList.remove('hidden-section');
+          // Mostrar/ocultar controles del tablón
+          const tablonControls = document.getElementById('tablon-controls');
+          if (tablonControls) {
+        tablonControls.style.display = (section === 'tablon') ? '' : 'none';
+          }
+        }
+      </script>
 </body>
 
 </html>

@@ -67,9 +67,9 @@ for ($i = 1; $i <= 5; $i++) {
 
 <!-- Barra superior -->
 <nav class="navbar navbar-light bg-light px-3 mb-4">
-  <button class="btn btn-outline-secondary me-2" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
-    <-
-  </button>
+  <a href="vistaUsuReg.php" class="btn btn-outline-secondary me-2">
+    <i class="bi bi-arrow-left"></i>
+  </a>
   <span class="navbar-text me-auto">Bienvenido, <?= htmlspecialchars($user['nick']) ?></span>
   <a href="../controlador/logout.php" class="btn btn-outline-danger">Cerrar Sesión</a>
 </nav>
