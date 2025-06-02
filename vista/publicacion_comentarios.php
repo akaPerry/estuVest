@@ -67,7 +67,7 @@ for ($i = 1; $i <= 5; $i++) {
 
 <!-- Barra superior -->
 <nav class="navbar navbar-light bg-light px-3 mb-4">
-  <a href="vistaUsuReg.php" class="btn btn-outline-secondary me-2">
+  <a class="btn btn-outline-secondary me-2" onclick="window.history.back()">
     <i class="bi bi-arrow-left"></i>
   </a>
   <span class="navbar-text me-auto">Bienvenido, <?= htmlspecialchars($user['nick']) ?></span>

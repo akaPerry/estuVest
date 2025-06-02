@@ -1,7 +1,6 @@
 <?php
 include_once("../modelo/BaseDatos.php");
-try {
-   
+try {   
     $bd = new BaseDatos();
     $sql = "DELETE FROM publicacion WHERE id_publicacion = :id";
     $stmt = $bd->conn->prepare($sql);

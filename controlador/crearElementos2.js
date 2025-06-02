@@ -431,7 +431,7 @@ function actualizarPublicacion(id, accion) {
                 <th>Curso</th>
                 <th>Asignatura</th>
                 <th>Estudio</th>
-                <th>Ver PDF</th>
+                <th>Detalles</th>
                 <th>Eliminar</th>
               </tr>
             </thead>
@@ -443,7 +443,7 @@ function actualizarPublicacion(id, accion) {
             <td>${pub.curso}</td>
             <td>${pub.asignatura}</td>
             <td>${pub.estudio}</td>
-            <td><a href="${pub.archivo}" target="_blank" class="btn btn-info">Ver PDF</a></td>
+            <td><a href="${pub.archivo}" target="_blank" class="btn btn-info">Ver detalles</a></td>
             <td><button class="btn btn-danger" onclick="eliminarPublicacion(${pub.id_publicacion})">Eliminar</button></td>
           </tr>`;
         });
@@ -465,6 +465,20 @@ function actualizarPublicacion(id, accion) {
         data: { id: id },
         success: function () {
           mostrarTablaPublicaciones();
+            // Mostrar alerta con botón de cierre
+            const alerta = $(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              Publicación eliminada correctamente
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+            `);
+            $("main").append(alerta);
+            // Desaparecer automáticamente después de 2 segundos
+            setTimeout(() => {
+              alerta.fadeOut(500, function() {
+              $(this).alert('close');
+              });
+            }, 1000);
         },
         error: function () {
           alert('Error al eliminar la publicación.');
