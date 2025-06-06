@@ -1,35 +1,42 @@
-document.addEventListener("DOMContentLoaded", iniciar);
-function iniciar() {
-  generarAvisosPublicacion();
-  mostrarTablaPublicaciones();
-  console.log("Función iniciar ejecutada correctamente");
+document.addEventListener("DOMContentLoaded", function () {
+  // Inicia funciones globales comunes
+  if (typeof generarAvisosPublicacion === 'function') {
+    generarAvisosPublicacion();
+    generarAvisosSolicitudes();
+    generarNumeroAvisos();
+  }
 
-  // Asignar eventos a botones
-  document.getElementById('btnCentro').addEventListener('click', function () {
-    mostrarFormulario('centro');
-  });
+  if (typeof mostrarTablaPublicaciones === 'function') {
+    mostrarTablaPublicaciones();
+  }
 
-  document.getElementById('btnAsig').addEventListener('click', function () {
+  console.log("Script de administración cargado");
+
+  // --- Gestión de botones y formularios según existencia ---
+  asignarEventoSiExiste('btnCentro', () => mostrarFormulario('centro'));
+  asignarEventoSiExiste('btnAsig', () => {
     mostrarFormulario('asignatura');
-    pintarCentros();
+    if (typeof pintarCentros === 'function') pintarCentros();
   });
+  asignarEventoSiExiste('btnEstudio', () => mostrarFormulario('estudio'));
 
-  document.getElementById('btnEstudio').addEventListener('click', function () {
-    mostrarFormulario('estudio');
-  });
+  asignarEventoSiExiste('btnModCentro', () => mostrarLista('centro'));
+  asignarEventoSiExiste('btnModAsig', () => mostrarLista('asignatura'));
+  asignarEventoSiExiste('btnModEstudio', () => mostrarLista('estudio'));
+});
 
-  document.getElementById('btnModCentro').addEventListener('click', function () {
-    mostrarLista('centro');
-  });
-
-  document.getElementById('btnModAsig').addEventListener('click', function () {
-    mostrarLista('asignatura');
-  });
-
-  document.getElementById('btnModEstudio').addEventListener('click', function () {
-    mostrarLista('estudio');
-  });
+/**
+ * Asigna un evento click a un elemento si existe.
+ * @param {string} id - ID del elemento en el DOM
+ * @param {Function} callback - Función que se ejecutará al hacer click
+ */
+function asignarEventoSiExiste(id, callback) {
+  const el = document.getElementById(id);
+  if (el && typeof callback === 'function') {
+    el.addEventListener('click', callback);
+  }
 }
+
 
 // Función para pintar estudios en el select correspondiente
 function pintarEstudios(valorSeleccionado = null) {
@@ -144,6 +151,10 @@ function mostrarFormulario(tipo, modo = 'crear', datos = null, id = null) {
     `;
   }
 
+if (!contenedor) {
+  console.log("Llamada desde funcionalidad de solicitud.");
+  return;
+}
   contenedor.innerHTML = html;
 
 if (tipo === 'asignatura') {
@@ -235,7 +246,7 @@ if (tipo === 'estudio') {
 
 // Función para validar formulario (campos no vacíos y sin caracteres extraños)
 function validarFormulario(form) {
-  const inputs = form.querySelectorAll('input, select');
+  const inputs = form.querySelectorAll('input, select, select2');
   const regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.\-]+$/;
   let valido = true;
 
@@ -350,15 +361,16 @@ function editarElemento(id, tipo) {
 
 function generarAvisosPublicacion(){
   let url = '../controlador/getPublicaciones.php';
-
+$("#avisosSolicitudes").empty();
   $.ajax({
       url: url,
       type: 'POST',
       success: function(response) {
           $("#publicacionesRevisar").html(response);
-        
-          const total = $("#contenedorPublicaciones").data("count");
-          if (total !== undefined) {
+          //pintar el numero de avisos en el indicador
+        const total = $("#contenedorPublicaciones").data("count");
+      
+       if (total !== undefined) {
               $("#alertNumber").html(total);
           }
       },
@@ -367,7 +379,67 @@ function generarAvisosPublicacion(){
       }
   });
 }
+function generarAvisosSolicitudes(){
+  let url='../controlador/getSolicitudes.php';
+  $.ajax({
+    url:url,
+    type:'POST',
+    success: function(solicitudes) {
+      console.log(solicitudes);
+      let html = '';
 
+      solicitudes.forEach(solicitud => {
+        let datos = JSON.parse(solicitud.valor);
+        let tipo = solicitud.tipo;
+        let usuario = solicitud.usuario;
+
+        let titulo = '';
+        let contenidoExtra = '';
+
+        if (tipo === 'centro') {
+          titulo = `Nuevo centro: ${datos.centro}`;
+          contenidoExtra = `
+            <p><strong>Ciudad:</strong> ${datos.ciudad}</p>
+            <p><strong>Tipo:</strong> ${datos.tipo}</p>
+          `;
+        } else if (tipo === 'estudio') {
+          titulo = `Nuevo estudio: ${datos.estudio}`;
+          contenidoExtra = `
+            <p><strong>Centro asociado:</strong> ID ${datos.centro}</p>
+            <p><strong>Nivel:</strong> ${datos.nivel}</p>
+          `;
+        } else if (tipo === 'asignatura') {
+          titulo = `Nueva asignatura: ${datos.asignatura}`;
+          contenidoExtra = `
+            <p><strong>Grado asociado:</strong> ID ${datos.grado}</p>
+            <p><strong>Curso:</strong> ${datos.curso}</p>
+          `;
+        }
+
+        html += `
+          <div class="aviso card mb-3" data-id="${solicitud.id_solicitud}" data-tipo="${tipo}">
+            <div class="card-body">
+              <h5 class="card-title">${titulo}</h5>
+              <p class="card-subtitle text-muted">Solicitado por: ${usuario}</p>
+              ${contenidoExtra}
+              <div class="text-end mt-3">
+                <button class="btn btn-success btn-sm me-2 aceptar-solicitud" onclick=aceptarSolicitud(${solicitud.id_solicitud})>Aceptar</button>
+                <button class="btn btn-danger btn-sm rechazar-solicitud" onclick=rechazarSolicitud(${solicitud.id_solicitud})>Rechazar</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      $('#avisosSolicitudes').html(html);      
+      
+    },
+    error: function(xhr, status, error) {
+      console.error('Error al obtener solicitudes:', error);
+    }
+  });
+}
+  
 
 function aceptarPublicacion(btn) {
     const id = $(btn).data("id");
@@ -402,9 +474,9 @@ function actualizarPublicacion(id, accion) {
                 $("#alertNumber").text(total);
             }
 
-            // Opcional: ocultar el aviso si no quedan publicaciones
+            // ocultar el aviso si no quedan publicaciones
             if (total === 0) {
-                $("#alertNumber").closest('.alert').hide(); // o mostrar otro mensaje
+                $("#alertNumber").closest('.alert').hide();
                 $("#publicacionesRevisar").html('<div class="alert alert-info">No hay más publicaciones pendientes.</div>');
             }
         },
@@ -443,7 +515,7 @@ function actualizarPublicacion(id, accion) {
             <td>${pub.curso}</td>
             <td>${pub.asignatura}</td>
             <td>${pub.estudio}</td>
-            <td><a href="${pub.archivo}" target="_blank" class="btn btn-info">Ver detalles</a></td>
+            <td><button onclick="cargarVistaPublicacion(${pub.id_publicacion})" target="_blank" class="btn btn-info">Ver detalles</button></td>
             <td><button class="btn btn-danger" onclick="eliminarPublicacion(${pub.id_publicacion})">Eliminar</button></td>
           </tr>`;
         });
@@ -486,3 +558,128 @@ function actualizarPublicacion(id, accion) {
       });
     }
   }
+
+  function cargarVistaPublicacion(id){
+    $.ajax({
+      url : "../controlador/getPublicacionesTablon.php",
+      type : "POST",
+      data : {
+        id : id
+      },
+      success: function(){
+       window.location.href="../vista/publicacion_comentarios.php?id="+id;
+      }
+      
+    })
+  }
+
+function generarNumeroAvisos(){
+  const publi = $("#contenedorPublicaciones").data("count");
+  const soli = $("#avisosSolicitudes").data("count");
+  const total=publi+soli;
+          if (total !== undefined) {
+              $("#alertNumber").html(total);
+          }
+}
+
+function aceptarSolicitud(id) {
+    $.ajax({
+        url: '../controlador/getSolicitudes.php',
+        method: 'POST',
+        data: { id: id },
+        dataType: 'json',
+        success: function (respuesta) {
+            if (respuesta.error) {
+                alert("Error al obtener solicitud: " + respuesta.error);
+                return;
+            }
+
+            const tipo = respuesta.tipo;
+            const datos = JSON.parse(respuesta.valor); // el JSON con los datos exactos
+            let urlDestino;
+            let postData = {};
+
+            switch (tipo) {
+                case 'centro':
+                    urlDestino = '../controlador/addCentro.php';
+                    // valor contiene: centro, ciudad, tipo
+                    postData = {
+                        centro: datos.centro,
+                        ciudad: datos.ciudad,
+                        tipo: datos.tipo
+                    };
+                    break;
+
+                case 'estudio':
+                    urlDestino = '../controlador/addEstudio.php';
+                    // valor contiene: estudio, nivel, centro
+                    postData = {
+                        estudio: datos.estudio,
+                        nivel: datos.nivel,
+                        centro: datos.centro
+                    };
+                    break;
+
+                case 'asignatura':
+                    urlDestino = '../controlador/addAsignatura.php';
+                    // valor contiene: asignatura, curso, grado
+                    postData = {
+                        asignatura: datos.asignatura,
+                        curso: datos.curso,
+                        grado: datos.grado
+                    };
+                    break;
+
+                default:
+                    alert("Tipo de solicitud desconocido: " + tipo);
+                    return;
+            }
+
+            // Insertar el elemento en la BD usando el PHP correspondiente
+            $.ajax({
+                url: urlDestino,
+                method: 'POST',
+                data: postData,
+                success: function () {
+                    // Update de la solicitud si se insertó correctamente
+                   $.ajax({
+                        url: '../controlador/updateSolicitud.php',
+                        method: 'POST',
+                        data: { id: id },
+                        success: function () {
+                            alert("Solicitud aceptada correctamente.");
+                            generarAvisosSolicitudes(); // eliminar fila
+                        },
+                        error: function () {
+                            alert("Error al actualizar la solicitud.");
+                        }
+                    });
+                    window.alert("elemento creado correctamente");
+                    generarAvisosSolicitudes();
+                },
+                error: function () {
+                    alert("Error al insertar el nuevo " + tipo + " en la base de datos.");
+                }
+            });
+        },
+        error: function () {
+            alert("Error al obtener datos de la solicitud.");
+        }
+    });
+}
+function rechazarSolicitud(id) {
+  if (confirm("¿Seguro que deseas rechazar esta solicitud?")) {
+    $.ajax({
+      url: '../controlador/deleteSolicitud.php',
+      method: 'POST',
+      data: { id: id },
+      success: function () {
+        alert("Solicitud rechazada correctamente.");
+        generarAvisosSolicitudes(); // Actualiza la lista de avisos
+      },
+      error: function () {
+        alert("Error al rechazar la solicitud.");
+      }
+    });
+  }
+}

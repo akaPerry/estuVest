@@ -1,4 +1,24 @@
+function updateDescargas(id){
+  $.ajax({
+    url:"../controlador/updateDescargas.php",
+    type:'POST',
+    data:{
+      id:"id"
+    },
+    dataType: "json",
+    success:function(){
+      console.log("descagas ++ en id:"+id);
+    },
+    error:function(){
+      console.log("Algo ha ido mal con la publicación con ID:"+id);
+    }
+  });
+}
 $(document).ready(function () {
+ $(document).on('click', '#descargarBtn', function () {
+    const id = $(this).data('id'); // obtiene el id del atributo data-id
+    updateDescargas(id);
+  });
   $('form[action="publicar_comentario.php"]').on('submit', function (e) {
     e.preventDefault();
 
@@ -63,3 +83,4 @@ $(document).ready(function () {
     });
   });
 });
+

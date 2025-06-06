@@ -2,7 +2,7 @@
 include_once("../modelo/BaseDatos.php");
 try {   
     $bd = new BaseDatos();
-    $sql = "DELETE FROM publicacion WHERE id_publicacion = :id";
+    $sql = "DELETE FROM solicitud WHERE id_solicitud = :id";
     $stmt = $bd->conn->prepare($sql);
     $stmt->bindParam(':id', $_POST['id']);
     

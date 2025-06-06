@@ -42,7 +42,6 @@ for ($i = 1; $i <= 5; $i++) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../controlador/vista_comentarios.js"></script>
 
   <style>
     body {
@@ -89,7 +88,8 @@ for ($i = 1; $i <= 5; $i++) {
             <strong>Asignatura:</strong> <?= htmlspecialchars($pub['nombre_asignatura']) ?><br>
             <strong>Estudio:</strong> <?= htmlspecialchars($pub['nombre_estudio']) ?><br>
             <strong>Curso:</strong> <?= htmlspecialchars($pub['curso']) ?><br>
-            <strong>Fecha:</strong> <?= htmlspecialchars($pub['fecha']) ?>
+            <strong>Fecha:</strong> <?= htmlspecialchars($pub['fecha']) ?><br>
+            <strong>Descargas:</strong> <?= isset($pub['descargas']) ? (int)$pub['descargas'] : 0 ?>
           </p>
         </div>
       </div>
@@ -101,7 +101,7 @@ for ($i = 1; $i <= 5; $i++) {
         <div class="card-body">
           <iframe src="../archivos/<?= htmlspecialchars($pub['archivo']) ?>" class="w-100" height="400px"></iframe>
           <div class="d-flex justify-content-between align-items-center mt-3">
-            <a href="../archivos/<?= htmlspecialchars($pub['archivo']) ?>" download class="btn btn-secondary">Descargar PDF</a>
+              <a href="../archivos/<?= htmlspecialchars($pub['archivo']) ?>" download class="btn btn-secondary" id="descargarBtn" data-id="<?= $id ?>">Descargar PDF</a>
             <div><?= $estrellasHtml ?></div>
           </div>
         </div>
@@ -140,6 +140,8 @@ for ($i = 1; $i <= 5; $i++) {
     <?php endif; ?>
   </div>
 </div>
-
+    <script src="../controlador/vista_comentarios.js"></script>
+        
 </body>
+
 </html>

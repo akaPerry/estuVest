@@ -32,6 +32,8 @@ $posts = [
   <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 
   <script src="../controlador/funcionesVistaUsu.js"></script>
+    <script type="text/javascript" src="../controlador/funcionesBotonesTabla_original.js"></script>
+
   <link rel="stylesheet" href="../css/estilo-tablonPubli.css">
 
 
@@ -112,12 +114,13 @@ $posts = [
         <option value="estudio">Estudio</option>
         <option value="curso">Curso</option>
         <option value="fecha">Fecha</option>
+        <option value="descargas">Descargas</option>
           </select>
         </div>
       </div>
       </div>
 
-      <!-- Aquí se insertarán los cards -->
+      
       <div id="section-tablon" class="section">
         <h3>Tablón de Publicaciones</h3>
           <!-- Aquí se insertarán los cards -->
@@ -163,8 +166,10 @@ $posts = [
         </div>
         <button type="submit" class="btn btn-success" id="subirBtn" name="subirBtn">Subir</button>
         <button type="reset" class="btn btn-warning">Borrar Datos</button>
-
       </form>
+      <br>
+      <p>*Si echas en falta algún elemento dentro del formulario (tu centro de estudios, tu carrera etc.) haznoslo saber clicando en este botón</p>
+      <a href="../vista/vistaSolicitud.php?id=<?php echo $_SESSION['id'] ?>" class="btn btn-warning">Enviar Solicitud</a>
     </div>
 
     <!-- Sección: Ver Publicaciones -->
@@ -220,12 +225,7 @@ $posts = [
     // Mostrar sección de tablón por defecto
     showSection('tablon');
   </script>
-  <script>
-    $(document).ready(function() {
-      $('select').select2();
-
-    });
-  </script>
+  <script src="../controlador/iniciarSelect2.js"></script>
   <script>
         // Oculta los controles cuando no está visible la sección de tablón
         function showSection(section) {

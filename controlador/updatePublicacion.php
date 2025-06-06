@@ -11,14 +11,15 @@ if (isset($_POST['id'], $_POST['accion'])) {
 
         switch ($accion) {
             case 'aceptar':
-                $sql = "UPDATE publicacion SET publicado = 1 WHERE id_publicacion = ?";
+                $sql = "UPDATE publicacion SET publicado = 1 WHERE id_publicacion = :id";
                 $stmt = $conn->prepare($sql);
-                $stmt->execute([$id]);
+                 $stmt->bindParam(":id",$id);
+                $stmt->execute();
                 echo "✅ Publicación aceptada correctamente.";
                 break;
 
             case 'rechazar':
-               
+                include_once("../controlador/deletePublicacion.php");
                 echo "❌ Publicación marcada como rechazada (pendiente de comentario).";
                 break;
                 

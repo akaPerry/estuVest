@@ -76,6 +76,7 @@ try {
             data-estudio="' . htmlspecialchars($pub['nombre_estudio']) . '"
             data-curso="' . htmlspecialchars($pub['curso']) . '"
             data-fecha="' . htmlspecialchars($pub['fecha']) . '"
+            data-descargas="'.htmlspecialchars($pub['descargas']).'"
         >
             <div class="card-body position-relative">
                 <div class="position-absolute top-0 end-0 p-2">
@@ -88,7 +89,8 @@ try {
                     <strong>Asignatura:</strong> ' . htmlspecialchars($pub['nombre_asignatura']) . '<br>
                     <strong>Estudio:</strong> ' . htmlspecialchars($pub['nombre_estudio']) . '<br>
                     <strong>Curso:</strong> ' . htmlspecialchars($pub['curso']) . '<br>
-                    <strong>Fecha:</strong> ' . htmlspecialchars($pub['fecha']) . '
+                    <strong>Fecha:</strong> ' . htmlspecialchars($pub['fecha']) . '<br>
+                    <strong>Descargas:</strong> '.htmlspecialchars($pub['descargas']).'
                 </p>
 
                 <div class="d-flex justify-content-between align-items-center">

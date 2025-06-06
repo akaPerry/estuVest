@@ -42,7 +42,7 @@ try {
     // Enviar respuesta con datos del comentario
     echo json_encode([
         'autor' => htmlspecialchars($autor),
-        'fecha' => date("Y-m-d H:i"),
+        'fecha' => date("Y-m-d, H:i"),
         'texto' => nl2br(htmlspecialchars($comentario))
     ]);
 } catch (PDOException $e) {

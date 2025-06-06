@@ -196,44 +196,50 @@ function cargarPublicacionesTablon() {
 
 
 function cargaIsotope () {
-    let $grid = new Isotope("#publicaciones", {
-      itemSelector: ".card",
-      layoutMode: "fitRows",
-      getSortData: {
-        asignatura: "[data-asignatura]",
-        autor: "[data-autor]",
-        estudio: "[data-estudio]",
-        curso: "[data-curso]",
-        fecha: "[data-fecha]"
+  let $grid = new Isotope("#publicaciones", {
+    itemSelector: ".card",
+    layoutMode: "fitRows",
+    getSortData: {
+      asignatura: "[data-asignatura]",
+      autor: "[data-autor]",
+      estudio: "[data-estudio]",
+      curso: "[data-curso]",
+      fecha: "[data-fecha]",
+      descargas: function (itemElem) {
+        return parseInt(itemElem.getAttribute('data-descargas')) || 0;
+      }
+    }
+  });
+
+  // Buscador en vivo
+  $('#search').on('input', function () {
+    let filtro = $(this).val().toLowerCase();
+    $('.close-btn').toggleClass('d-none', filtro === '');
+
+    $grid.arrange({
+      filter: function () {
+        let texto = $(this).text().toLowerCase();
+        return texto.includes(filtro);
       }
     });
+  });
 
-    // Buscador en vivo
-    $('#search').on('input', function () {
-      let filtro = $(this).val().toLowerCase();
-      $('.close-btn').toggleClass('d-none', filtro === '');
+  // Botón limpiar buscador
+  $('.close-btn').on('click', function () {
+    $('#search').val('');
+    $grid.arrange({ filter: '*' });
+    $(this).addClass('d-none');
+  });
 
-      $grid.arrange({
-        filter: function () {
-          let texto = $(this).text().toLowerCase();
-          return texto.includes(filtro);
-        }
-      });
+  // Ordenar por atributo
+  $('#sort-by').on('change', function () {
+    let sortByValue = $(this).val();
+
+    $grid.arrange({
+      sortBy: sortByValue,
+      sortAscending: sortByValue === 'descargas' ? false : true
     });
-
-    // Botón limpiar buscador
-    $('.close-btn').on('click', function () {
-      $('#search').val('');
-      $grid.arrange({ filter: '*' });
-      $(this).addClass('d-none');
-    });
-
-    // Ordenar por atributo
-    $('#sort-by').on('change', function () {
-      let sortByValue = $(this).val();
-      $grid.arrange({ sortBy: sortByValue });
-    });
-
+  });
 }
 
 $(document).on("mouseenter", ".vote-star", function () {

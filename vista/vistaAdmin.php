@@ -105,11 +105,13 @@
         <h2>Avisos</h2>
        
         <div id="publicacionesRevisar"></div>
+        <div id="avisosSolicitudes"></div>
       </div>
       <div id="publicaciones" class="seccion" style="display: none">
         <h2>Publicaciones</h2>
         <div id="publicacionesContenedor"></div>
       </div>
+      
     </main>
   </div>
   
