@@ -1,20 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>indexEstuVest</title>
-    <link rel="stylesheet" href="../bootstrap-5.0.2-dist/css/bootstrap.min.css">
-    <script type="text/javascript" href="../bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <h1>Bienvenido a EstuVest</h1>
+    <title>EstuVest</title> 
+    <script src="../bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../css/estilo-index.css">
+    <body>
+        
+<header>
+    EstuVest
+  </header>
+  <main>
     <p>¿Qué deseas hacer?</p>
     <form action="logUsu.php" method="post">
-    <input type="submit" value="Iniciar Sesión">
+      <button type="submit" class="btn btn-custom">Iniciar Sesión</button>
     </form>
     <form action="registrarse.php" method="post">
-    <input type="submit" value="Registrarse">
-</form>
+      <button type="submit" class="btn btn-custom">Registrarse</button>
+    </form>
+  </main>
+  <script src="../bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+   

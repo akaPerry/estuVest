@@ -175,17 +175,7 @@ $posts = [
     <!-- Sección: Ver Publicaciones -->
     <div id="section-ver" class="section hidden-section">
       <h3>Tus Publicaciones</h3>
-      <?php foreach ($posts as $post): ?>
-        <?php if ($post['author'] === $user['nick']): ?>
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title"><?= htmlspecialchars($post['title']) ?></h5>
-              <p class="card-text"><?= htmlspecialchars($post['description']) ?></p>
-              <a href="uploads/<?= htmlspecialchars($post['file']) ?>" target="_blank" class="btn btn-outline-primary">Ver PDF</a>
-            </div>
-          </div>
-        <?php endif; ?>
-      <?php endforeach; ?>
+      <div id="tusPublicaciones"></div>
     </div>
 
     <!-- Sección: Editar Perfil -->

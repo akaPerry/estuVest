@@ -1,3 +1,22 @@
+<?php
+session_start(); // Asegúrate de que session_start() se llama al principio del script
+
+if (isset($_GET['url']) && $_GET['url'] == 'false') {
+    $_SESSION['admin'] = true;
+    // Redirige a la página de administración (opcional)
+    // header("Location: vistaAdmin.php"); // Redirige a la misma página
+    // exit; // Importante: detener la ejecución después de la redirección
+} else {
+    // Redirige a la página principal si 'url' no es 'false' o no está presente
+    header("Location: index.php");
+    exit; // Importante: detener la ejecución después de la redirección
+}
+
+// Opcional: Mostrar un mensaje o contenido si la redirección no se realiza
+// echo "Bienvenido al panel de administración.";
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +33,6 @@
 </head>
 
 <body>
-  <?php session_start(); ?>
   <h1>Has iniciado sesión correctamente.</h1>
   <p>Hola, <?php
             echo $_SESSION['nick']. "<br>"; 
@@ -41,7 +59,8 @@
           <a href="#" class="nav-link" onclick="mostrarSeccion('configuracion')">Configuración</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link" onclick="mostrarSeccion('avisos')">Avisos <span id="alertNumber" class="badge rounded-pill bg-danger">0</span> </a>
+          <a href="#" class="nav-link" onclick="mostrarSeccion('avisos')">Avisos
+            <span id="alertNumber" class="badge rounded-pill bg-danger">0</span> </a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link" onclick="mostrarSeccion('publicaciones')">Publicaciones</a>

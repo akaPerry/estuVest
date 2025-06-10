@@ -11,7 +11,7 @@ try {
         $sql = "SELECT s.id_solicitud, s.elemento AS tipo, s.valor, s.id_usuario, u.nick AS usuario
                 FROM solicitud s
                 JOIN usuario u ON s.id_usuario = u.id
-                WHERE s.id_solicitud = :id";
+                WHERE s.id_solicitud = :id and s.estado = 0";
         $stmt = $bd->conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();

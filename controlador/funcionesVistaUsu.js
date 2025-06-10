@@ -18,6 +18,7 @@ function iniciar() {
 
   llenarSelectCentro();
   cargarPublicacionesTablon();
+  cargarMisPublicaciones();
 }
 
 function llenarSelectCentro() {
@@ -281,4 +282,27 @@ $(document).on("click", ".vote-star", function () {
       alert("Error al enviar el voto.");
     },
   });
+});
+
+
+function cargarMisPublicaciones() {
+  console.log("cargando cosas");
+    $.ajax({
+        url: '../controlador/getMisPublicaciones.php', // Ajusta la ruta si es necesario
+        type: 'GET',
+        dataType: 'html',
+        success: function (data) {
+          console.log(data);
+            $('#tusPublicaciones').html(data);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar las publicaciones:", status, error);
+            $('#tusPublicaciones').html("<p>Error al cargar las publicaciones. Por favor, inténtalo de nuevo más tarde.</p>");
+        }
+    });
+}
+
+// Llama a la función cuando la página esté lista
+$(document).ready(function() {
+    cargarMisPublicaciones();
 });

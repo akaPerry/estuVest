@@ -56,7 +56,8 @@ try {
         $html .= '</div>'; // cierre del contenedor
         echo $html;
     } else {
-        echo '<div class="alert alert-info">No hay publicaciones pendientes de aprobación.</div>';
+        //$html = '<div id="contenedorPublicaciones" data-count="' . $total . '">';
+        echo '<div id="contenedorPublicaciones" data-count="0" class="alert alert-info">No hay publicaciones pendientes de aprobación.</div>';
     }
 } catch(PDOException $e) {
     echo '<div class="alert alert-danger">Error: ' . $e->getMessage() . '</div>';

@@ -6,33 +6,7 @@
     <title>Editar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="../controlador/preseleccionarEstudios.js"></script>
-    <style>
-        .form-label {
-            color: #ea0aa5;
-        }
-        .form-container {
-            border: 2px solid #0aa5ea;
-            border-radius: 15px;
-            padding: 30px;
-            background-color: #f8f9fa;
-            max-width: 600px;
-            margin: auto;
-            margin-top: 50px;
-        }
-        .btn-primary-custom {
-            background-color: #a5ea0b;
-            border-color: #a5ea0b;
-            color: black;
-        }
-        .btn-primary-custom:hover {
-            background-color: #8ec809;
-            border-color: #8ec809;
-        }
-        .btn-secondary-custom {
-            background-color: #0aa5ea;
-            border-color: #0aa5ea;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/estilo-formulario.css">
 </head>
 <body>
 

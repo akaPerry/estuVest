@@ -14,11 +14,11 @@ try{
         $id=$bd->sacarUnValor("usuario","nick",$_SESSION["nick"],"id");
         $_SESSION["id"]=$id;
         session_write_close();
-        if($bd->buscarEnTabla("usuario_registrado","id",$id)){
+        if($bd->buscarEnTabla("usuario_registrado","id",$id, true)){
             header("Location: ../vista/vistaUsuReg.php");
         }
         else{
-            header("Location: ../vista/vistaAdmin.php");
+            header("Location: ../vista/vistaAdmin.php?url=false");
         }
         
     }

@@ -21,6 +21,7 @@ inputs.forEach(input => {
 
   if (name !== "id_usuario" && name !== "elemento") {
     formData[name] = value;
+    input.value = ""; // Vacía el campo después de recoger el valor
   }
 });
 
@@ -36,7 +37,7 @@ $.ajax({
   url: "../controlador/addSolicitud.php",
   data: datosSolicitud,
   success:function(){
-    $(form).empty();
+    //$(form).reset();
     window.alert("Solicitud enviada correctamente. Será revisada por un administrador");
   },
 });

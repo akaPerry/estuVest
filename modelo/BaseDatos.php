@@ -32,8 +32,9 @@ class BaseDatos {
     }
 
     //devuelve un true si encuentra un campo con un valor determinado en una tabla, si no, devuelve un false
-    public function buscarEnTabla(string $tabla, string $campo, string $valor)
+    public function buscarEnTabla(string $tabla, string $campo, string $valor, bool $login = false)
     {
+        session_start();
         $busca = $this->sacarTabla($tabla);
         foreach ($busca as $key => $value) {
             if ($value["$campo"] == $valor) {

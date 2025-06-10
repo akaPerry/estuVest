@@ -30,6 +30,7 @@ for ($i = 1; $i <= 5; $i++) {
         ? '<i class="bi bi-star-fill text-warning"></i>'
         : '<i class="bi bi-star text-secondary"></i>';
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -135,10 +136,21 @@ for ($i = 1; $i <= 5; $i++) {
             <h6 class="card-subtitle mb-1 text-muted">Por <?= htmlspecialchars($c['autor_comentario']) ?> el <?= htmlspecialchars($c['fecha']) ?></h6>
             <p class="card-text"><?= nl2br(htmlspecialchars($c['texto'])) ?></p>
           </div>
+          <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] === true): ?>
+            <div class="card-body">
+              <button class="btn btn-danger btn-sm eliminar-comentario" onclick="deleteComentario(<?= htmlspecialchars($c['id_comentario']) ?>)" data-id="<?= htmlspecialchars($c['id_comentario']) ?>">Eliminar</button>
+            </div>
+          <?php endif; ?>
         </div>
       <?php endforeach; ?>
     <?php endif; ?>
   </div>
+  
+</div>
+
+
+
+
 </div>
     <script src="../controlador/vista_comentarios.js"></script>
         

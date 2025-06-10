@@ -84,3 +84,40 @@ $(document).ready(function () {
   });
 });
 
+
+function deleteComentario(eventOrId) {
+  // Permite recibir el evento o el id directamente
+  let id;
+  if (typeof eventOrId === 'object' && eventOrId.target) {
+    id = $(eventOrId.target).data('id');
+  } else {
+    id = eventOrId;
+  }
+
+  if (!confirm('¿Seguro que deseas eliminar este comentario?')) return;
+
+  $.ajax({
+    url: '../controlador/deleteComentario.php',
+    type: 'POST',
+    data: { id_comentario: id },
+    dataType: 'json',
+    success: function (res) {
+      if (res.success) {
+        // Elimina la card del comentario del DOM
+        $(`button.eliminar-comentario[data-id="${id}"]`).closest('.card').remove();
+
+        // Actualiza el contador de comentarios
+        const h4 = $('.mt-4').next('.mt-4').find('h4').first();
+        const textoActual = h4.text();
+        const numActual = parseInt(textoActual.match(/\d+/)[0]) || 1;
+        h4.text(`Comentarios (${numActual - 1})`);
+        alert('to pinga');
+      } else {
+        alert(res.error || 'No se pudo eliminar el comentario.');
+      }
+    },
+    error: function () {
+      alert('Error al eliminar el comentario.');
+    }
+  });
+}
